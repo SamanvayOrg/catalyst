@@ -1,7 +1,6 @@
 package org.catalysts.commengage.controller.web;
 
 import org.catalysts.commengage.contract.ApplicationStatus;
-import org.catalysts.commengage.contract.OrganisationCreateRequest;
 import org.catalysts.commengage.contract.UserCreateRequest;
 import org.catalysts.commengage.controller.web.framework.AbstractController;
 import org.catalysts.commengage.domain.Organisation;

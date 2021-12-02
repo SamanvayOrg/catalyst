@@ -1,7 +1,5 @@
 package org.catalysts.commengage.contract;
 
-import org.catalysts.commengage.domain.security.UserType;
-
 public class UserResponse {
     private String email;
     private String phone;
