@@ -1,12 +1,9 @@
 package org.catalysts.commengage.domain.framework;
 
 import org.hibernate.annotations.GenericGenerator;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import java.sql.Date;
 import java.util.UUID;
 
 @MappedSuperclass
@@ -16,19 +13,6 @@ public abstract class AbstractEntity {
     @GenericGenerator(name = "uuid", strategy = "uuid2")
     @Column(name = "uuid", updatable = false, unique = true, nullable = false)
     private UUID uuid;
-
-    @Column(name = "inactive")
-    private boolean inactive;
-
-    @CreatedDate
-    @Column(name = "created_date", updatable = false, nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    private java.util.Date createdDate;
-
-    @LastModifiedDate
-    @Column(name = "last_modified_date", nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    private java.util.Date lastModifiedDate;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -82,30 +66,6 @@ public abstract class AbstractEntity {
 
     public void setUuid(UUID uuid) {
         this.uuid = uuid;
-    }
-
-    public Boolean getInactive() {
-        return inactive;
-    }
-
-    public void setInactive(Boolean inactive) {
-        this.inactive = inactive;
-    }
-
-    public java.util.Date getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(Date createdDate) {
-        this.createdDate = createdDate;
-    }
-
-    public java.util.Date getLastModifiedDate() {
-        return lastModifiedDate;
-    }
-
-    public void setLastModifiedDate(Date lastModifiedDate) {
-        this.lastModifiedDate = lastModifiedDate;
     }
 
 }

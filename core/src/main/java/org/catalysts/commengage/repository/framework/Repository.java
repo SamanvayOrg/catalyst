@@ -32,33 +32,6 @@ public class Repository {
         }
     }
 
-    public static <T extends AbstractEntity> T findByIdOrCreate(Integer id, AbstractRepository<T> repository, T newEntity) {
-        if (id == null || id == 0) {
-            return newEntity;
-        }
-        T t = findById(id, repository);
-        if (t == null) {
-            if (newEntity instanceof AbstractEntity)
-                ((AbstractEntity)newEntity).setInactive(false);
-            return newEntity;
-        }
-        return t;
-    }
-
-    public static <T extends AbstractEntity> T findByUuidOrCreate(String uuid, AbstractRepository<T> abstractRepository, T newEntity) {
-        if (uuid == null || uuid.isEmpty()) {
-            newEntity.setUuid(UUID.randomUUID());
-            return newEntity;
-        }
-        T entity = abstractRepository.findByUuid(UUID.fromString(uuid));
-        if (entity == null) {
-            newEntity.setUuid(UUID.fromString(uuid));
-            newEntity.setInactive(false);
-            entity = newEntity;
-        }
-        return entity;
-    }
-
     public static <T extends AbstractEntity> void mergeChildren(List<Integer> proposedChildrenIds, List<Integer> existingChildrenIds, AbstractRepository<T> childRepository, Consumer<AbstractEntity> removeChild, Consumer<AbstractEntity> addChild) {
         Set<Integer> proposedChildrenIdSet = new HashSet<>(proposedChildrenIds);
         HashSet<Integer> toRemoveChildrenIds = new HashSet<>(existingChildrenIds);
