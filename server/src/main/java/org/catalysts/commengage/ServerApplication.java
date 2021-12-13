@@ -8,11 +8,14 @@ import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.Properties;
 
 @SpringBootApplication
 @EnableJpaAuditing
+@EnableScheduling
 public class ServerApplication {
     private Environment environment;
 
@@ -31,6 +34,11 @@ public class ServerApplication {
 //        javaMailSender.setJavaMailProperties(getMailProperties());
 
         return javaMailSender;
+    }
+
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
     }
 
     private Properties getMailProperties() {

@@ -1,5 +1,6 @@
 package org.catalysts.commengage.domain;
 
+import org.catalysts.commengage.domain.framework.AbstractEntity;
 import org.catalysts.commengage.domain.geo.Point;
 import org.hibernate.annotations.Type;
 
@@ -9,7 +10,7 @@ import java.time.LocalTime;
 
 @Entity
 @Table(name = "user_request")
-public class UserRequest {
+public class UserRequest extends AbstractEntity {
 
     @ManyToOne()
     @JoinColumn(name = "qr_code_id")
@@ -19,11 +20,11 @@ public class UserRequest {
     @JoinColumn(name = "location_id")
     private Location location;
 
-    @Type(type = "org.catalysts.commengage.domain.geo")
+    @Type(type = "org.catalysts.commengage.domain.geo.Point")
     @Column
     private Point lat;
 
-    @Type(type = "org.catalysts.commengage.domain.geo")
+    @Type(type = "org.catalysts.commengage.domain.geo.Point")
     @Column
     private Point lng;
 

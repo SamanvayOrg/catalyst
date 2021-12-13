@@ -40,5 +40,5 @@ create table user_request
     os_version      text,
     timezone        text,
     model           text,
-    brand           text,
+    brand           text
 );
