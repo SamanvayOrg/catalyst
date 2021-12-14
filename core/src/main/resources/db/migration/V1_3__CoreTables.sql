@@ -7,7 +7,8 @@ create table qr_code
     folder          text,
     scans           int,
     unique_visitors int,
-    creation_date   timestamp                       not null
+    creation_date   timestamp                       not null,
+    offset_field    int                             not null
 );
 
 create table location
