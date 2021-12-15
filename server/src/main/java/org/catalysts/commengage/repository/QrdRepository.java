@@ -1,6 +1,7 @@
 package org.catalysts.commengage.repository;
 
 import org.catalysts.commengage.client.RequestHelper;
+import org.catalysts.commengage.contract.qrd.QRCodeDetailsDto;
 import org.catalysts.commengage.contract.qrd.QRCodesListingDto;
 import org.catalysts.commengage.contract.qrd.QRDContainer;
 import org.catalysts.commengage.service.QrdAuthService;
@@ -14,10 +15,14 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
+import java.util.HashMap;
 import java.util.Map;
 
 @Repository
 public class QrdRepository {
+
+    private static final int QR_CODE_DETAILS_API_LIMIT = 1000;
+    private static final int QR_CODE_DETAILS_API_OFFSET = 0;
 
     @Value("${qrd.api.baseUrl}")
     private String baseUrl;
@@ -39,7 +44,29 @@ public class QrdRepository {
         return responseEntity.getBody();
     }
 
+    public QRDContainer<QRCodeDetailsDto> getQRCodeDetails(String qrCodeId) {
+        URI uri = RequestHelper.createUri(baseUrl + "/api/details", qrCodeDetailsParams(qrCodeId));
+        ResponseEntity<QRDContainer<QRCodeDetailsDto>> responseEntity =
+                restTemplate.exchange(uri,
+                        HttpMethod.GET,
+                        HttpEntity.EMPTY,
+                        new ParameterizedTypeReference<>() {
+                        });
+        return responseEntity.getBody();
+    }
+
+    private Map<String, String> qrCodeDetailsParams(String qrCodeId) {
+        var params = new HashMap<String, String>();
+        params.putAll(authParams());
+        params.put("id", qrCodeId);
+        params.put("limit", String.valueOf(QR_CODE_DETAILS_API_LIMIT));
+        params.put("offset", String.valueOf(QR_CODE_DETAILS_API_OFFSET));
+        return params;
+    }
+
     private Map<String, String> authParams() {
-        return Map.of("key", qrdAuthService.obtainAccessToken());
+        Map<String, String> params = new HashMap<>();
+        params.put("key", qrdAuthService.obtainAccessToken());
+        return params;
     }
 }
