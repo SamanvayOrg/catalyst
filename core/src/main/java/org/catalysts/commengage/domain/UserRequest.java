@@ -18,7 +18,7 @@ public class UserRequest extends AbstractEntity {
 
     @ManyToOne()
     @JoinColumn(name = "qr_code_id")
-    private QrCode qrCode;
+    private QRCode qrCode;
 
     @ManyToOne()
     @JoinColumn(name = "location_id")
@@ -47,13 +47,13 @@ public class UserRequest extends AbstractEntity {
     private String browser;
 
     @Column
-    private String browser_version;
+    private String browserVersion;
 
     @Column
     private String os;
 
     @Column
-    private String os_version;
+    private String osVersion;
 
     @Column
     private String timezone;

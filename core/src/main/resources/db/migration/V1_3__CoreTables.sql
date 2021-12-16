@@ -8,7 +8,7 @@ create table qr_code
     scans           int,
     unique_visitors int,
     creation_date   timestamp                       not null,
-    offset_field    int                             not null
+    requests_offset    int                             not null
 );
 
 create table location
@@ -28,7 +28,7 @@ create table user_request
     id              serial primary key,
     uuid            uuid default uuid_generate_v4() not null unique,
     qr_code_id      int                             not null references qr_code (id),
-    location_id     int                             not null references location (id),
+    location_id     int                             references location (id),
     unique_id       text                            not null,
     request_date    date                            not null,
     local_scan_time time                            not null,

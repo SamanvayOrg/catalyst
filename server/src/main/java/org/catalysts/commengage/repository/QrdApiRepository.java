@@ -19,10 +19,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Repository
-public class QrdRepository {
+public class QrdApiRepository {
 
     private static final int QR_CODE_DETAILS_API_LIMIT = 1000;
-    private static final int QR_CODE_DETAILS_API_OFFSET = 0;
 
     @Value("${qrd.api.baseUrl}")
     private String baseUrl;
@@ -44,8 +43,9 @@ public class QrdRepository {
         return responseEntity.getBody();
     }
 
-    public QRDContainer<QRCodeDetailsDto> getQRCodeDetails(String qrCodeId) {
-        URI uri = RequestHelper.createUri(baseUrl + "/api/details", qrCodeDetailsParams(qrCodeId));
+    public QRDContainer<QRCodeDetailsDto> getQRCodeDetails(String qrCodeId, int requestsOffset) {
+        URI uri = RequestHelper.createUri(baseUrl + "/api/details",
+                qrCodeDetailsParams(qrCodeId, requestsOffset));
         ResponseEntity<QRDContainer<QRCodeDetailsDto>> responseEntity =
                 restTemplate.exchange(uri,
                         HttpMethod.GET,
@@ -55,12 +55,12 @@ public class QrdRepository {
         return responseEntity.getBody();
     }
 
-    private Map<String, String> qrCodeDetailsParams(String qrCodeId) {
+    private Map<String, String> qrCodeDetailsParams(String qrCodeId, int requestsOffset) {
         var params = new HashMap<String, String>();
         params.putAll(authParams());
         params.put("id", qrCodeId);
         params.put("limit", String.valueOf(QR_CODE_DETAILS_API_LIMIT));
-        params.put("offset", String.valueOf(QR_CODE_DETAILS_API_OFFSET));
+        params.put("offset", String.valueOf(requestsOffset));
         return params;
     }
 

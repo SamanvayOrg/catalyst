@@ -14,7 +14,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "qr_code")
-public class QrCode extends AbstractEntity {
+public class QRCode extends AbstractEntity {
 
     @Column
     private String qrdId;
@@ -35,5 +35,5 @@ public class QrCode extends AbstractEntity {
     private LocalDateTime creationDate;
 
     @Column
-    private int offSetField;
+    private int requestsOffset;
 }
