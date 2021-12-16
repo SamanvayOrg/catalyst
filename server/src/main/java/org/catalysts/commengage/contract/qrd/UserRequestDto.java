@@ -2,6 +2,7 @@ package org.catalysts.commengage.contract.qrd;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.catalysts.commengage.domain.QRCode;
 import org.catalysts.commengage.domain.UserRequest;
 import org.catalysts.commengage.domain.geo.Point;
 
@@ -40,13 +41,15 @@ public class UserRequestDto {
 
     private String brand;
 
-    public UserRequest createEntity() {
+    public UserRequest createEntity(QRCode qrCodeEntity) {
         UserRequest entity = new UserRequest();
+        entity.setQrCode(qrCodeEntity);
         entity.setUniqueRequestId(this.uniqueid);
         entity.setAnonymizedIp(this.anonymizedip);
         entity.setRequestDate(this.requestdate);
         entity.setLocalScanTime(this.localscantime);
-        entity.setLatLong(new Point(this.lat, this.lng));
+        entity.setLat(this.lat);
+        entity.setLng(this.lng);
         entity.setAccuracy(this.accuracy);
         entity.setBrowser(this.browser);
         entity.setBrowserVersion(this.browserversion);

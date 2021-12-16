@@ -24,9 +24,11 @@ public class UserRequest extends AbstractEntity {
     @JoinColumn(name = "location_id")
     private Location location;
 
-    @Type(type = "org.catalysts.commengage.domain.geo.Point")
     @Column
-    private Point latLong;
+    private double lat;
+
+    @Column
+    private double lng;
 
     @Column
     private double accuracy;

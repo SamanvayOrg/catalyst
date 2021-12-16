@@ -36,14 +36,14 @@ public class QrdScheduler {
     public void qrdJob() throws JsonProcessingException {
         logger.debug("In qrd job");
         var qrCodeListings = qrdApi.getQRCodes();
-        logger.debug(String.format("QRCodes = %s", objectMapper.writeValueAsString(qrCodeListings)));
+        logger.debug(String.format("QRCodescreateUserRequest = %s", objectMapper.writeValueAsString(qrCodeListings)));
         for (QRCodeDto qrCodeDto : qrCodeListings.getResult().getQrcodes()) {
             QRCode qrCodeEntity = createOrUpdateQRCode(qrCodeDto);
             int requestsOffset = qrCodeEntity.getRequestsOffset();
             try {
                 var qrCodeDetails = qrdApi.getQRCodeDetails(qrCodeDto.getQrdid(), requestsOffset);
                 for (UserRequestDto userRequestDto : qrCodeDetails.getResult().getRequests()) {
-                    requestsOffset = createUserRequest(userRequestDto, qrCodeEntity.getRequestsOffset());
+                    requestsOffset = createUserRequest(qrCodeEntity, userRequestDto, qrCodeEntity.getRequestsOffset());
                 }
             } catch (Exception e) {
                 logger.error("Exception", e);
@@ -56,9 +56,9 @@ public class QrdScheduler {
         }
     }
 
-    private int createUserRequest(UserRequestDto userRequestDto,
+    private int createUserRequest(QRCode qrCodeEntity, UserRequestDto userRequestDto,
                                   int requestsOffset) {
-        UserRequest entity = userRequestDto.createEntity();
+        UserRequest entity = userRequestDto.createEntity(qrCodeEntity);
         userRequestRepository.save(entity);
         return requestsOffset + 1;
     }
