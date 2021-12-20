@@ -6,11 +6,8 @@ import org.apache.log4j.Logger;
 import org.catalysts.commengage.config.WebSecurityConfig;
 import org.catalysts.commengage.contract.qrd.QRCodeDto;
 import org.catalysts.commengage.contract.qrd.UserRequestDto;
-import org.catalysts.commengage.domain.QRCode;
-import org.catalysts.commengage.domain.UserRequest;
-import org.catalysts.commengage.repository.QRCodeRepository;
-import org.catalysts.commengage.repository.QrdApiRepository;
-import org.catalysts.commengage.repository.UserRequestRepository;
+import org.catalysts.commengage.domain.*;
+import org.catalysts.commengage.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -22,10 +19,28 @@ public class QrdScheduler {
     private QrdApiRepository qrdApi;
 
     @Autowired
+    private MapMyIndiaApiRepository mapMyIndiaApi;
+
+    @Autowired
     private ObjectMapper objectMapper;
 
     @Autowired
     private QRCodeRepository qrCodeRepository;
+
+//    @Autowired
+//    private LocationRepository locationRepository;
+//
+//    @Autowired
+//    private CityRepository cityRepository;
+//
+//    @Autowired
+//    private VillageRepository villageRepository;
+//
+//    @Autowired
+//    private DistrictRepository districtRepository;
+//
+//    @Autowired
+//    private SubDistrictRepository subDistrictRepository;
 
     @Autowired
     private UserRequestRepository userRequestRepository;
@@ -44,7 +59,11 @@ public class QrdScheduler {
                 var qrCodeDetails = qrdApi.getQRCodeDetails(qrCodeDto.getQrdid(), requestsOffset);
                 logger.debug("Got back qrCodeDetails");
                 for (UserRequestDto userRequestDto : qrCodeDetails.getResult().getRequests()) {
-                    requestsOffset = createUserRequest(qrCodeEntity, userRequestDto, qrCodeEntity.getRequestsOffset());
+                    if (requestsOffset >= 50) {
+                        logger.debug(String.format("Stopping scan processing. QrCode: %s. Processed %s scans.", qrCodeEntity.getQrdId(), requestsOffset));
+                        break;
+                    }
+                    requestsOffset = createUserRequest(qrCodeEntity, userRequestDto, requestsOffset);
                     logger.debug(String.format("QrCode: %s. Processed %s scans.", qrCodeEntity.getQrdId(), requestsOffset));
                 }
             } catch (Exception e) {
@@ -54,12 +73,21 @@ public class QrdScheduler {
                 qrCodeEntity.setRequestsOffset(requestsOffset);
                 qrCodeRepository.save(qrCodeEntity);
             }
+            break;
         }
     }
 
     private int createUserRequest(QRCode qrCodeEntity, UserRequestDto userRequestDto,
                                   int requestsOffset) {
-        UserRequest entity = userRequestDto.createEntity(qrCodeEntity);
+        var reverseGeoCode = mapMyIndiaApi.getReverseGeoCode(userRequestDto.getLat(), userRequestDto.getLng());
+        logger.debug(String.format("Lat %f Lng %f Reverse GeoCode: %s", userRequestDto.getLat(), userRequestDto.getLng(), reverseGeoCode));
+        var entity = userRequestDto.createEntity(qrCodeEntity);
+        entity.setState(reverseGeoCode.getState());
+        entity.setDistrict(reverseGeoCode.getDistrict());
+        entity.setSubDistrict(reverseGeoCode.getSubDistrict());
+        entity.setCity(reverseGeoCode.getCity());
+        entity.setVillage(reverseGeoCode.getVillage());
+        entity.setPinCode(reverseGeoCode.getPincode());
         userRequestRepository.save(entity);
         return requestsOffset + 1;
     }

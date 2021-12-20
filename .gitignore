@@ -6,3 +6,4 @@ out
 commengage.iml
 logs
 dump.sql
+*.log

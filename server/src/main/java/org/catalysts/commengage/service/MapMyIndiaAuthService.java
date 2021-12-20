@@ -3,16 +3,14 @@ package org.catalysts.commengage.service;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.util.Map;
-
 @Service
-public class QrdAuthService implements AuthService {
+public class MapMyIndiaAuthService implements AuthService {
 
-    @Value("${qrd.auth.token}")
-    private String qrdAuthToken;
+    @Value("${mapmyindia.auth.token}")
+    private String mapMyIndiaAuthToken;
 
 
     public String obtainAccessToken() {
-        return qrdAuthToken;
+        return mapMyIndiaAuthToken;
     }
 }
