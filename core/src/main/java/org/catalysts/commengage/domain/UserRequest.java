@@ -20,9 +20,9 @@ public class UserRequest extends AbstractEntity {
     @JoinColumn(name = "qr_code_id")
     private QRCode qrCode;
 
-    @ManyToOne()
-    @JoinColumn(name = "location_id")
-    private Location location;
+//    @ManyToOne()
+//    @JoinColumn(name = "location_id")
+//    private Location location;
 
     @Column
     private double lat;
@@ -65,4 +65,22 @@ public class UserRequest extends AbstractEntity {
 
     @Column
     private String brand;
+
+    @Column
+    private String village;
+
+    @Column
+    private String district;
+
+    @Column
+    private String subDistrict;
+
+    @Column
+    private String city;
+
+    @Column
+    private String state;
+
+    @Column
+    private String pinCode;
 }

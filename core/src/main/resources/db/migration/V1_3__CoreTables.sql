@@ -11,16 +11,52 @@ create table qr_code
     requests_offset int                             not null
 );
 
+create table state
+(
+    id   serial primary key,
+    uuid uuid default uuid_generate_v4() not null unique,
+    name text
+);
+
+create table district
+(
+    id       serial primary key,
+    uuid     uuid default uuid_generate_v4() not null unique,
+    name     text,
+    state_id int                             not null references state (id)
+);
+
+create table sub_district
+(
+    id          serial primary key,
+    uuid        uuid default uuid_generate_v4() not null unique,
+    name        text,
+    district_id int                             not null references district (id)
+);
+
+create table village
+(
+    id              serial primary key,
+    uuid            uuid default uuid_generate_v4() not null unique,
+    name            text,
+    sub_district_id int                             not null references sub_district (id)
+);
+
+create table city
+(
+    id              serial primary key,
+    uuid            uuid default uuid_generate_v4() not null unique,
+    name            text,
+    sub_district_id int                             not null references sub_district (id)
+);
+
 create table location
 (
-    id           serial primary key,
-    uuid         uuid default uuid_generate_v4() not null unique,
-    village      text,
-    district     text,
-    sub_district text,
-    city         text,
-    state        text,
-    pincode      text
+    id      serial primary key,
+    uuid    uuid default uuid_generate_v4() not null unique,
+    city    int references city (id),
+    village int references village (id),
+    pincode text
 );
 
 create table user_request
