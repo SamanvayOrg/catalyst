@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserRequestRepository extends CrudRepository<UserRequest, Integer> {
-    UserRequest findByUniqueRequestId(String uniqueRequestId);
+    UserRequest findByUniqueQrdRequestId(String uniqueRequestId);
 }

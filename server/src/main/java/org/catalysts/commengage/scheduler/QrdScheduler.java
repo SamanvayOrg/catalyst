@@ -55,14 +55,15 @@ public class QrdScheduler {
         for (QRCodeDto qrCodeDto : qrCodeListings.getResult().getQrcodes()) {
             QRCode qrCodeEntity = createOrUpdateQRCode(qrCodeDto);
             int requestsOffset = qrCodeEntity.getRequestsOffset();
+            logger.debug(String.format("Current offset for %s is %d", qrCodeEntity.getQrdId(), requestsOffset));
             try {
                 var qrCodeDetails = qrdApi.getQRCodeDetails(qrCodeDto.getQrdid(), requestsOffset);
                 logger.debug("Got back qrCodeDetails");
                 for (UserRequestDto userRequestDto : qrCodeDetails.getResult().getRequests()) {
-                    if (requestsOffset >= 50) {
-                        logger.debug(String.format("Stopping scan processing. QrCode: %s. Processed %s scans.", qrCodeEntity.getQrdId(), requestsOffset));
-                        break;
-                    }
+//                    if (requestsOffset >= 500) {
+//                        logger.debug(String.format("Stopping scan processing. QrCode: %s. Processed %s scans.", qrCodeEntity.getQrdId(), requestsOffset));
+//                        break;
+//                    }
                     requestsOffset = createUserRequest(qrCodeEntity, userRequestDto, requestsOffset);
                     logger.debug(String.format("QrCode: %s. Processed %s scans.", qrCodeEntity.getQrdId(), requestsOffset));
                 }
@@ -73,7 +74,7 @@ public class QrdScheduler {
                 qrCodeEntity.setRequestsOffset(requestsOffset);
                 qrCodeRepository.save(qrCodeEntity);
             }
-            break;
+//            break;
         }
     }
 
