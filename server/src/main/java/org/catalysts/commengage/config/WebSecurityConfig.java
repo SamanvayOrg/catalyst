@@ -1,6 +1,7 @@
 package org.catalysts.commengage.config;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,7 +26,7 @@ import javax.sql.DataSource;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(jsr250Enabled = true, prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-    private static final Logger logger = Logger.getLogger(WebSecurityConfig.class);
+    private static final Logger logger = LogManager.getLogger(WebSecurityConfig.class);
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;

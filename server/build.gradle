@@ -15,18 +15,6 @@ repositories {
     }
 }
 
-tasks.withType(JavaCompile).all {
-    options.compilerArgs += ['--enable-preview']
-}
-
-tasks.withType(Test).all {
-    jvmArgs += '--enable-preview'
-}
-
-tasks.withType(JavaExec) {
-    jvmArgs += '--enable-preview'
-}
-
 task migrateTestDb() {
     dependsOn ":core:migrateTestDb"
 }
@@ -48,10 +36,12 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     implementation 'com.bugsnag:bugsnag-spring:3.+'
 
-    compile group: 'org.json', name: 'json', version: '20201115'
-    compile "log4j:log4j:1.2.16"
-    compile "commons-io:commons-io:2.4"
-    compile "commons-lang:commons-lang:2.6"
+    implementation 'org.json:json:20211205'
+    implementation 'commons-io:commons-io:2.11.0'
+    implementation 'org.apache.commons:commons-lang3:3.12.0'
+
+    implementation 'org.apache.logging.log4j:log4j-api:2.17.1'
+    implementation 'org.apache.logging.log4j:log4j-core:2.17.1'
 
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.security:spring-security-test'

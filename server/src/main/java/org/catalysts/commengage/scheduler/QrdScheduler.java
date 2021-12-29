@@ -1,7 +1,7 @@
 package org.catalysts.commengage.scheduler;
 
-import org.apache.log4j.Logger;
-import org.catalysts.commengage.config.WebSecurityConfig;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.catalysts.commengage.contract.qrd.QRCodeDto;
 import org.catalysts.commengage.contract.qrd.UserRequestDto;
 import org.catalysts.commengage.domain.QRCode;
@@ -30,7 +30,7 @@ public class QrdScheduler {
     @Autowired
     private UserRequestRepository userRequestRepository;
 
-    private static final Logger logger = Logger.getLogger(WebSecurityConfig.class);
+    private static final Logger logger = LogManager.getLogger(QrdScheduler.class);
 
     @Scheduled(cron = "${commengage.qrd.cron}")
     public void qrdJob() {

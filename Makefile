@@ -27,7 +27,7 @@ define _drop_db
 endef
 
 define _run_server
-	java -jar --enable-preview server/build/libs/server-0.0.1-SNAPSHOT.jar --app.cron.main="0/3 * * * * ?" --app.cron.full.error="0 1 * * * ?"
+	java -jar server/build/libs/server-0.0.1-SNAPSHOT.jar --app.cron.main="0/3 * * * * ?" --app.cron.full.error="0 1 * * * ?"
 endef
 
 
@@ -70,7 +70,7 @@ run-server: build-db build-server
 	$(call _run_server)
 
 run-server-without-background: build-server
-	java -jar --enable-preview server/build/libs/server-0.0.1-SNAPSHOT.jar --app.cron.main="0 0 6 6 9 ? 2035"
+	java -jar server/build/libs/server-0.0.1-SNAPSHOT.jar --app.cron.main="0 0 6 6 9 ? 2035"
 
 test-server: drop-test-db build-test-db build-server
 	./gradlew unitTest
