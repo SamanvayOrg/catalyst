@@ -1,16 +1,19 @@
 package org.catalysts.commengage.scheduler;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.log4j.Logger;
 import org.catalysts.commengage.config.WebSecurityConfig;
 import org.catalysts.commengage.contract.qrd.QRCodeDto;
 import org.catalysts.commengage.contract.qrd.UserRequestDto;
-import org.catalysts.commengage.domain.*;
-import org.catalysts.commengage.repository.*;
+import org.catalysts.commengage.domain.QRCode;
+import org.catalysts.commengage.repository.MapMyIndiaApiRepository;
+import org.catalysts.commengage.repository.QRCodeRepository;
+import org.catalysts.commengage.repository.QrdApiRepository;
+import org.catalysts.commengage.repository.UserRequestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 public class QrdScheduler {
@@ -22,25 +25,7 @@ public class QrdScheduler {
     private MapMyIndiaApiRepository mapMyIndiaApi;
 
     @Autowired
-    private ObjectMapper objectMapper;
-
-    @Autowired
     private QRCodeRepository qrCodeRepository;
-
-//    @Autowired
-//    private LocationRepository locationRepository;
-//
-//    @Autowired
-//    private CityRepository cityRepository;
-//
-//    @Autowired
-//    private VillageRepository villageRepository;
-//
-//    @Autowired
-//    private DistrictRepository districtRepository;
-//
-//    @Autowired
-//    private SubDistrictRepository subDistrictRepository;
 
     @Autowired
     private UserRequestRepository userRequestRepository;
@@ -48,34 +33,34 @@ public class QrdScheduler {
     private static final Logger logger = Logger.getLogger(WebSecurityConfig.class);
 
     @Scheduled(cron = "${commengage.qrd.cron}")
-    public void qrdJob() throws JsonProcessingException {
-        logger.debug("In qrd job");
-        var qrCodeListings = qrdApi.getQRCodes();
-        logger.debug(String.format("QRCodescreateUserRequest = %s", objectMapper.writeValueAsString(qrCodeListings)));
-        for (QRCodeDto qrCodeDto : qrCodeListings.getResult().getQrcodes()) {
-            QRCode qrCodeEntity = createOrUpdateQRCode(qrCodeDto);
-            int requestsOffset = qrCodeEntity.getRequestsOffset();
-            logger.debug(String.format("Current offset for %s is %d", qrCodeEntity.getQrdId(), requestsOffset));
-            try {
-                var qrCodeDetails = qrdApi.getQRCodeDetails(qrCodeDto.getQrdid(), requestsOffset);
-                logger.debug("Got back qrCodeDetails");
-                for (UserRequestDto userRequestDto : qrCodeDetails.getResult().getRequests()) {
-//                    if (requestsOffset >= 500) {
-//                        logger.debug(String.format("Stopping scan processing. QrCode: %s. Processed %s scans.", qrCodeEntity.getQrdId(), requestsOffset));
-//                        break;
-//                    }
-                    requestsOffset = createUserRequest(qrCodeEntity, userRequestDto, requestsOffset);
-                    logger.debug(String.format("QrCode: %s. Processed %s scans.", qrCodeEntity.getQrdId(), requestsOffset));
-                }
-            } catch (Exception e) {
-                logger.error("Exception", e);
-                throw e;
-            } finally {
-                qrCodeEntity.setRequestsOffset(requestsOffset);
-                qrCodeRepository.save(qrCodeEntity);
+    public void qrdJob() {
+        logger.debug("Qrd background job started");
+        try {
+            var qrCodeListings = qrdApi.getQRCodes();
+            for (QRCodeDto qrCodeDto : qrCodeListings.getResult().getQrcodes()) {
+                processQRCode(qrCodeDto);
             }
-//            break;
         }
+        catch (Exception e) {
+            logger.error("Exception", e);
+            throw e;
+        }
+    }
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    protected void processQRCode(QRCodeDto qrCodeDto) {
+        QRCode qrCodeEntity = createOrUpdateQRCode(qrCodeDto);
+        int requestsOffset = qrCodeEntity.getRequestsOffset();
+        logger.debug(String.format("Current offset for %s is %d", qrCodeEntity.getQrdId(), requestsOffset));
+
+        var qrCodeDetails = qrdApi.getQRCodeDetails(qrCodeDto.getQrdid(), requestsOffset);
+        logger.debug("Got back qrCodeDetails");
+        for (UserRequestDto userRequestDto : qrCodeDetails.getResult().getRequests()) {
+            requestsOffset = createUserRequest(qrCodeEntity, userRequestDto, requestsOffset);
+            logger.debug(String.format("QrCode: %s. Processed %s scans.", qrCodeEntity.getQrdId(), requestsOffset));
+        }
+        qrCodeEntity.setRequestsOffset(requestsOffset);
+        qrCodeRepository.save(qrCodeEntity);
     }
 
     private int createUserRequest(QRCode qrCodeEntity, UserRequestDto userRequestDto,
