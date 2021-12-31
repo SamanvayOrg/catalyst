@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.catalysts.commengage.contract.qrd.QRCodeDto;
 import org.catalysts.commengage.contract.qrd.UserRequestDto;
 import org.catalysts.commengage.domain.QRCode;
+import org.catalysts.commengage.domain.UserRequest;
 import org.catalysts.commengage.repository.MapMyIndiaApiRepository;
 import org.catalysts.commengage.repository.QRCodeRepository;
 import org.catalysts.commengage.repository.QrdApiRepository;
@@ -40,8 +41,7 @@ public class QrdScheduler {
             for (QRCodeDto qrCodeDto : qrCodeListings.getResult().getQrcodes()) {
                 processQRCode(qrCodeDto);
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             logger.error("Exception", e);
             throw e;
         }
@@ -65,17 +65,23 @@ public class QrdScheduler {
 
     private int createUserRequest(QRCode qrCodeEntity, UserRequestDto userRequestDto,
                                   int requestsOffset) {
+        var entity = userRequestDto.createEntity(qrCodeEntity);
+        if (userRequestDto.getAccuracy() <= 5000) {
+            setReverseGeoCodeData(userRequestDto, entity);
+        }
+        userRequestRepository.save(entity);
+        return requestsOffset + 1;
+    }
+
+    private void setReverseGeoCodeData(UserRequestDto userRequestDto, UserRequest entity) {
         var reverseGeoCode = mapMyIndiaApi.getReverseGeoCode(userRequestDto.getLat(), userRequestDto.getLng());
         logger.debug(String.format("Lat %f Lng %f Reverse GeoCode: %s", userRequestDto.getLat(), userRequestDto.getLng(), reverseGeoCode));
-        var entity = userRequestDto.createEntity(qrCodeEntity);
         entity.setState(reverseGeoCode.getState());
         entity.setDistrict(reverseGeoCode.getDistrict());
         entity.setSubDistrict(reverseGeoCode.getSubDistrict());
         entity.setCity(reverseGeoCode.getCity());
         entity.setVillage(reverseGeoCode.getVillage());
         entity.setPinCode(reverseGeoCode.getPincode());
-        userRequestRepository.save(entity);
-        return requestsOffset + 1;
     }
 
     private QRCode createOrUpdateQRCode(QRCodeDto qrCodeDto) {
