@@ -27,6 +27,12 @@ public class QRCodeDto {
 
     private int uniquevisitors;
 
+    private String tags;
+
+    private String title;
+
+    private String description;
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime creationdate;
 
@@ -39,6 +45,9 @@ public class QRCodeDto {
         qrCode.setScans(this.scans);
         qrCode.setFolder(this.folder);
         qrCode.setCreationDate(this.creationdate);
+        qrCode.setTitle(this.title);
+        qrCode.setTags(this.tags);
+        qrCode.setDescription(this.description);
         return qrCode;
     }
 
@@ -48,5 +57,8 @@ public class QRCodeDto {
         qrCode.setUniqueVisitors(this.uniquevisitors);
         qrCode.setScans(this.scans);
         qrCode.setFolder(this.folder);
+        qrCode.setTitle(this.title);
+        qrCode.setTags(this.tags);
+        qrCode.setDescription(this.description);
     }
 }

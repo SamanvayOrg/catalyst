@@ -65,17 +65,17 @@ public class QrdScheduler {
 
     private int createUserRequest(QRCode qrCodeEntity, UserRequestDto userRequestDto,
                                   int requestsOffset) {
-        var entity = userRequestDto.createEntity(qrCodeEntity);
+        var userRequest = userRequestDto.createEntity(qrCodeEntity);
         if (userRequestDto.getAccuracy() <= 5000) {
-            setReverseGeoCodeData(userRequestDto, entity);
+            setReverseGeoCodeDataOnUserRequest(userRequestDto.getLat(), userRequestDto.getLng(), userRequest);
         }
-        userRequestRepository.save(entity);
+        userRequestRepository.save(userRequest);
         return requestsOffset + 1;
     }
 
-    private void setReverseGeoCodeData(UserRequestDto userRequestDto, UserRequest entity) {
-        var reverseGeoCode = mapMyIndiaApi.getReverseGeoCode(userRequestDto.getLat(), userRequestDto.getLng());
-        logger.debug(String.format("Lat %f Lng %f Reverse GeoCode: %s", userRequestDto.getLat(), userRequestDto.getLng(), reverseGeoCode));
+    private void setReverseGeoCodeDataOnUserRequest(double lat, double lng, UserRequest entity) {
+        var reverseGeoCode = mapMyIndiaApi.getReverseGeoCode(lat, lng);
+        logger.debug(String.format("Lat %f Lng %f Reverse GeoCode: %s", lat, lng, reverseGeoCode));
         entity.setState(reverseGeoCode.getState());
         entity.setDistrict(reverseGeoCode.getDistrict());
         entity.setSubDistrict(reverseGeoCode.getSubDistrict());

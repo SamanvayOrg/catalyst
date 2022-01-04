@@ -36,4 +36,13 @@ public class QRCode extends AbstractEntity {
 
     @Column
     private int requestsOffset;
+
+    @Column
+    private String tags;
+
+    @Column
+    private String title;
+
+    @Column
+    private String description;
 }
