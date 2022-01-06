@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Properties;
@@ -16,6 +17,7 @@ import java.util.Properties;
 @SpringBootApplication
 @EnableJpaAuditing
 @EnableScheduling
+@EnableTransactionManagement
 public class ServerApplication {
     private Environment environment;
 

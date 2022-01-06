@@ -2,6 +2,7 @@ package org.catalysts.commengage.repository;
 
 import org.catalysts.commengage.client.RequestHelper;
 import org.catalysts.commengage.contract.qrd.QRCodeDetailsDto;
+import org.catalysts.commengage.contract.qrd.QRCodeDto;
 import org.catalysts.commengage.contract.qrd.QRCodesListingDto;
 import org.catalysts.commengage.contract.qrd.QRDContainer;
 import org.catalysts.commengage.service.QrdAuthService;
@@ -16,6 +17,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Repository
@@ -32,7 +34,7 @@ public class QrdApiRepository {
     @Autowired
     private RestTemplate restTemplate;
 
-    public QRDContainer<QRCodesListingDto> getQRCodes() {
+    public List<QRCodeDto> getQRCodes() {
         URI uri = RequestHelper.createUri(baseUrl + "/api/qrcodes", authParams());
         ResponseEntity<QRDContainer<QRCodesListingDto>> responseEntity =
                 restTemplate.exchange(uri,
@@ -40,7 +42,7 @@ public class QrdApiRepository {
                         HttpEntity.EMPTY,
                         new ParameterizedTypeReference<>() {
                         });
-        return responseEntity.getBody();
+        return responseEntity.getBody().getResult().getQrcodes();
     }
 
     public QRDContainer<QRCodeDetailsDto> getQRCodeDetails(String qrCodeId, int requestsOffset) {
