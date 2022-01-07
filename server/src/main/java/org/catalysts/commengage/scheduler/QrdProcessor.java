@@ -10,7 +10,6 @@ import org.catalysts.commengage.repository.QRCodeRepository;
 import org.catalysts.commengage.repository.QrdApiRepository;
 import org.catalysts.commengage.repository.UserRequestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,23 +33,21 @@ public class QrdProcessor {
     private UserRequestRepository userRequestRepository;
 
     public void processQrCodes() {
-        for (QRCodeDto qrCodeDto : qrdApi.getQRCodes()) {
-            processQRCode(qrCodeDto);
-        }
+        qrdApi.getQRCodes().stream().forEach(this::processQRCode);
     }
 
-    public void processQRCode(QRCodeDto qrCodeDto) {
+    private void processQRCode(QRCodeDto qrCodeDto) {
         QRCode qrCodeEntity = createOrUpdateQRCode(qrCodeDto);
         int requestsOffset = qrCodeEntity.getRequestsOffset();
-        log.debug(String.format("Current offset for %s is %d", qrCodeEntity.getQrdId(), requestsOffset));
+        log.info("Current offset for {} is {}", qrCodeEntity.getQrdId(), requestsOffset);
 
         var qrCodeDetails = qrdApi.getQRCodeDetails(qrCodeDto.getQrdid(), requestsOffset);
-        log.debug("Got back qrCodeDetails");
+        log.info("Got back qrCodeDetails");
         List<UserRequestDto> requests = qrCodeDetails.getResult().getRequests();
         for (int i = 0; i < requests.size(); i++) {
             UserRequestDto userRequestDto = requests.get(i);
             requestsOffset = createUserRequest(qrCodeEntity, userRequestDto, requestsOffset);
-            log.debug(String.format("QrCode: %s. Processed %s scans.", qrCodeEntity.getQrdId(), requestsOffset));
+            log.info("QrCode: {}. Processed {} scans.", qrCodeEntity.getQrdId(), requestsOffset);
         }
         qrCodeEntity.setRequestsOffset(requestsOffset);
         qrCodeRepository.save(qrCodeEntity);
@@ -60,7 +57,7 @@ public class QrdProcessor {
                                   int requestsOffset) {
         var userRequest = userRequestDto.createEntity(qrCodeEntity);
         if (userRequestDto.getAccuracy() <= 5000) {
-            setReverseGeoCodeDataOnUserRequest(userRequestDto.getLat(), userRequestDto.getLng(), userRequest);
+//            setReverseGeoCodeDataOnUserRequest(userRequestDto.getLat(), userRequestDto.getLng(), userRequest);
         }
         userRequestRepository.save(userRequest);
         return requestsOffset + 1;
@@ -68,7 +65,7 @@ public class QrdProcessor {
 
     private void setReverseGeoCodeDataOnUserRequest(double lat, double lng, UserRequest entity) {
         var reverseGeoCode = mapMyIndiaApi.getReverseGeoCode(lat, lng);
-        log.debug(String.format("Lat %f Lng %f Reverse GeoCode: %s", lat, lng, reverseGeoCode));
+        log.info("Lat {} Lng {} Reverse GeoCode: {}", lat, lng, reverseGeoCode);
         entity.setState(reverseGeoCode.getState());
         entity.setDistrict(reverseGeoCode.getDistrict());
         entity.setSubDistrict(reverseGeoCode.getSubDistrict());

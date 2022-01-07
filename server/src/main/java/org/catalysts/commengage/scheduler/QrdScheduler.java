@@ -13,7 +13,7 @@ public class QrdScheduler {
 
     @Scheduled(cron = "${commengage.qrd.cron}")
     public void qrdJob() {
-        log.debug("Qrd background job started");
+        log.info("Qrd background job started");
         qrdProcessor.processQrCodes();
     }
 }

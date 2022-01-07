@@ -109,3 +109,6 @@ deploy-to-vagrant-only:
 
 deploy-to-vagrant: build-server deploy-to-vagrant-only
 #######
+
+deploy-to-do: build-server
+	scp server/build/libs/server-0.0.1-SNAPSHOT.jar do-vrutti:/root/source/comm-engage-service
