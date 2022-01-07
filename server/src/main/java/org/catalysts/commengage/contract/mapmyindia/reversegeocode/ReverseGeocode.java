@@ -1,14 +1,12 @@
 package org.catalysts.commengage.contract.mapmyindia.reversegeocode;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 @Getter
 @Setter
 @EqualsAndHashCode
 @ToString
+@Builder
 public class ReverseGeocode {
     private String city;
     private String village;

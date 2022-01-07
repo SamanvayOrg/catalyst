@@ -3,10 +3,7 @@ package org.catalysts.commengage.contract.qrd;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.catalysts.commengage.domain.QRCode;
 
 import java.time.LocalDateTime;
@@ -15,6 +12,7 @@ import java.time.LocalDateTime;
 @Setter
 @EqualsAndHashCode()
 @ToString
+@Builder
 public class QRCodeDto {
     @JsonProperty("id")
     private String qrdid;

@@ -1,7 +1,6 @@
 package org.catalysts.commengage.contract.qrd;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.catalysts.commengage.domain.QRCode;
 import org.catalysts.commengage.domain.UserRequest;
 
@@ -10,6 +9,9 @@ import java.time.LocalTime;
 
 @Getter
 @Setter
+@EqualsAndHashCode()
+@ToString
+@Builder
 public class UserRequestDto {
 
     private String uniqueid;

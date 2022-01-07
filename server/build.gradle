@@ -6,7 +6,7 @@ plugins {
 
 group = 'org.catalysts.commengage'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '15'
+sourceCompatibility = '17'
 
 repositories {
     mavenCentral()
@@ -31,6 +31,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-mail'
+    implementation 'org.junit.jupiter:junit-jupiter:5.7.0'
+    implementation 'org.mockito:mockito-core:4.2.0'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     runtimeOnly 'org.postgresql:postgresql'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
