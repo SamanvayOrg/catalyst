@@ -6,7 +6,6 @@ import lombok.*;
 @Setter
 @EqualsAndHashCode
 @ToString
-@Builder
 public class ReverseGeocode {
     private String city;
     private String village;

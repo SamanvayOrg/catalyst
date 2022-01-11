@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 @Setter
 @EqualsAndHashCode()
 @ToString
-@Builder
 public class QRCodeDto {
     @JsonProperty("id")
     private String qrdid;

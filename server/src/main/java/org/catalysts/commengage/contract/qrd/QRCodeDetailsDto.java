@@ -8,7 +8,6 @@ import java.util.List;
 @Setter
 @EqualsAndHashCode()
 @ToString
-@Builder
 public class QRCodeDetailsDto {
     private int requestcount;
     private List<UserRequestDto> requests;

@@ -6,7 +6,6 @@ import lombok.*;
 @Setter
 @EqualsAndHashCode()
 @ToString
-@Builder
 public class QRDContainer<T> {
     private T result;
 }

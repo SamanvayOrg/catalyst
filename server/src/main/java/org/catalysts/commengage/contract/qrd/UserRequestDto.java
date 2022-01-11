@@ -11,7 +11,6 @@ import java.time.LocalTime;
 @Setter
 @EqualsAndHashCode()
 @ToString
-@Builder
 public class UserRequestDto {
 
     private String uniqueid;

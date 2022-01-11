@@ -42,7 +42,7 @@ class QrdProcessorTest {
 
     @Test
     void processQrCodes() {
-        when(mapMyIndiaApi.getReverseGeoCode(anyDouble(), anyDouble())).thenReturn(ReverseGeocode.builder().build());
+        when(mapMyIndiaApi.getReverseGeoCode(anyDouble(), anyDouble())).thenReturn(new ReverseGeocode());
         when(qrdApi.getQRCodes()).thenReturn(generateCodes());
         when(qrdApi.getQRCodeDetails(CODE, 1000, 0)).thenReturn(generateRequests(1000));
         when(qrdApi.getQRCodeDetails(CODE, 1000, 1000)).thenReturn(generateRequests(1000));
@@ -62,18 +62,17 @@ class QrdProcessorTest {
     }
 
     private List<QRCodeDto> generateCodes() {
-        var codes = List.of(QRCodeDto
-                .builder()
-                .qrdid(CODE)
-                .scans(2200)
-                .build());
+        QRCodeDto qrCodeDto = new QRCodeDto();
+        qrCodeDto.setQrdid(CODE);
+        qrCodeDto.setScans(2200);
+        var codes = List.of(qrCodeDto);
         return codes;
     }
 
     private List<UserRequestDto> generateRequests(int numberOfRequests) {
         var requests = new ArrayList<UserRequestDto>();
         for (int i = 0; i < numberOfRequests; i++) {
-            requests.add(UserRequestDto.builder().build());
+            requests.add(new UserRequestDto());
         }
         return requests;
     }
