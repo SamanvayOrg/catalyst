@@ -33,7 +33,7 @@ public class QrdProcessor {
     private UserRequestRepository userRequestRepository;
 
     public void processQrCodes() {
-        qrdApi.getQRCodes().stream().forEach(this::processQRCode);
+        qrdApi.getQRCodes().forEach(this::processQRCode);
     }
 
     private void processQRCode(QRCodeDto qrCodeDto) {

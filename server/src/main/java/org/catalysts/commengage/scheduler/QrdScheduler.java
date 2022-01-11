@@ -1,6 +1,7 @@
 package org.catalysts.commengage.scheduler;
 
 import lombok.extern.slf4j.Slf4j;
+import org.catalysts.commengage.service.HealthCheckService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -11,9 +12,18 @@ public class QrdScheduler {
     @Autowired
     private QrdProcessor qrdProcessor;
 
+    @Autowired
+    private HealthCheckService healthCheckService;
+
     @Scheduled(cron = "${commengage.qrd.cron}")
     public void qrdJob() {
-        log.info("Qrd background job started");
-        qrdProcessor.processQrCodes();
+        try {
+            log.info("Qrd background job started");
+            qrdProcessor.processQrCodes();
+            healthCheckService.verifyMainJob();
+            log.info("Qrd background job completed");
+        } catch (Exception e) {
+            log.error("Job Failed", e);
+        }
     }
 }
