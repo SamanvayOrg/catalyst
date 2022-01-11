@@ -110,5 +110,16 @@ deploy-to-vagrant-only:
 deploy-to-vagrant: build-server deploy-to-vagrant-only
 #######
 
-deploy-to-do: build-server
-	scp server/build/libs/server-0.0.1-SNAPSHOT.jar do-vrutti:/root/source/comm-engage-service
+#Production management
+deploy-to-prod: build-server
+	scp server/build/libs/server-0.0.1-SNAPSHOT.jar do-vrutti:/tmp
+	ssh do-vrutti "sudo cp /tmp/server-0.0.1-SNAPSHOT.jar /root/source/comm-engage-service/"
+
+start_service_prod:
+	ssh do-vrutti "sudo systemctl start comm-engage.service"
+
+stop_service_prod:
+	ssh do-vrutti "sudo systemctl stop comm-engage.service"
+
+restart_service_prod:
+	ssh do-vrutti "sudo systemctl restart comm-engage.service"
