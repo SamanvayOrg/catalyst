@@ -9,11 +9,14 @@ import org.springframework.stereotype.Service;
 @Service
 @Slf4j
 public class QrdScheduler {
-    @Autowired
-    private QrdProcessor qrdProcessor;
+    private final QrdProcessor qrdProcessor;
+    private final HealthCheckService healthCheckService;
 
     @Autowired
-    private HealthCheckService healthCheckService;
+    public QrdScheduler(QrdProcessor qrdProcessor, HealthCheckService healthCheckService) {
+        this.qrdProcessor = qrdProcessor;
+        this.healthCheckService = healthCheckService;
+    }
 
     @Scheduled(cron = "${commengage.qrd.cron}")
     public void qrdJob() {

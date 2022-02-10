@@ -1,13 +1,10 @@
 package org.catalysts.commengage.scheduler;
 
-import org.catalysts.commengage.contract.mapmyindia.reversegeocode.ReverseGeocode;
 import org.catalysts.commengage.contract.qrd.QRCodeDto;
 import org.catalysts.commengage.contract.qrd.UserRequestDto;
-import org.catalysts.commengage.repository.MapMyIndiaApiRepository;
 import org.catalysts.commengage.repository.QRCodeRepository;
 import org.catalysts.commengage.repository.QrdApiRepository;
 import org.catalysts.commengage.repository.UserRequestRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InOrder;
@@ -29,9 +26,6 @@ class QrdProcessorTest {
     private QrdApiRepository qrdApi;
 
     @Mock
-    private MapMyIndiaApiRepository mapMyIndiaApi;
-
-    @Mock
     private QRCodeRepository qrCodeRepository;
 
     @Mock
@@ -42,7 +36,6 @@ class QrdProcessorTest {
 
     @Test
     void processQrCodes() {
-        when(mapMyIndiaApi.getReverseGeoCode(anyDouble(), anyDouble())).thenReturn(new ReverseGeocode());
         when(qrdApi.getQRCodes()).thenReturn(generateCodes());
         when(qrdApi.getQRCodeDetails(CODE, 1000, 0)).thenReturn(generateRequests(1000));
         when(qrdApi.getQRCodeDetails(CODE, 1000, 1000)).thenReturn(generateRequests(1000));

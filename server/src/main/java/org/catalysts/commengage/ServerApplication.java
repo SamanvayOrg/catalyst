@@ -27,18 +27,6 @@ public class ServerApplication {
     }
 
     @Bean
-    public JavaMailSender javaMailService() {
-        JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
-//
-//        javaMailSender.setHost("myHost");
-//        javaMailSender.setPort(25);
-//
-//        javaMailSender.setJavaMailProperties(getMailProperties());
-
-        return javaMailSender;
-    }
-
-    @Bean
     public RestTemplate restTemplate() {
         return new RestTemplate();
     }

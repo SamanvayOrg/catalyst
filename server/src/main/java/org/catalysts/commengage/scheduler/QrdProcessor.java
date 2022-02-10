@@ -17,20 +17,18 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @Slf4j
 public class QrdProcessor {
-
     private static final int QRD_PAGE_LIMIT = 1000;
 
-    @Autowired
-    private QrdApiRepository qrdApi;
+    private final QrdApiRepository qrdApi;
+    private final QRCodeRepository qrCodeRepository;
+    private final UserRequestRepository userRequestRepository;
 
     @Autowired
-    private MapMyIndiaApiRepository mapMyIndiaApi;
-
-    @Autowired
-    private QRCodeRepository qrCodeRepository;
-
-    @Autowired
-    private UserRequestRepository userRequestRepository;
+    public QrdProcessor(QrdApiRepository qrdApi, QRCodeRepository qrCodeRepository, UserRequestRepository userRequestRepository) {
+        this.qrdApi = qrdApi;
+        this.qrCodeRepository = qrCodeRepository;
+        this.userRequestRepository = userRequestRepository;
+    }
 
     public void processQrCodes() {
         qrdApi.getQRCodes().forEach(this::processQRCode);
@@ -59,21 +57,10 @@ public class QrdProcessor {
                                   int requestsOffset) {
         var userRequest = userRequestDto.createEntity(qrCodeEntity);
         if (userRequestDto.getAccuracy() <= 5000) {
-            setReverseGeoCodeDataOnUserRequest(userRequestDto.getLat(), userRequestDto.getLng(), userRequest);
+//            setReverseGeoCodeDataOnUserRequest(userRequestDto.getLat(), userRequestDto.getLng(), userRequest);
         }
         userRequestRepository.save(userRequest);
         return requestsOffset + 1;
-    }
-
-    private void setReverseGeoCodeDataOnUserRequest(double lat, double lng, UserRequest entity) {
-        var reverseGeoCode = mapMyIndiaApi.getReverseGeoCode(lat, lng);
-        log.info("Lat {} Lng {} Reverse GeoCode: {}", lat, lng, reverseGeoCode);
-        entity.setState(reverseGeoCode.getState());
-        entity.setDistrict(reverseGeoCode.getDistrict());
-        entity.setSubDistrict(reverseGeoCode.getSubDistrict());
-        entity.setCity(reverseGeoCode.getCity());
-        entity.setVillage(reverseGeoCode.getVillage());
-        entity.setPinCode(reverseGeoCode.getPincode());
     }
 
     private QRCode createOrUpdateQRCodeEntity(QRCodeDto qrCodeDto) {
