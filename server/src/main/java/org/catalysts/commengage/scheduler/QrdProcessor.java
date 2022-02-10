@@ -1,11 +1,10 @@
 package org.catalysts.commengage.scheduler;
 
 import lombok.extern.slf4j.Slf4j;
-import org.catalysts.commengage.contract.qrd.QRCodeDto;
-import org.catalysts.commengage.contract.qrd.UserRequestDto;
+import org.catalysts.commengage.contract.qrd.QRCodeResponse;
+import org.catalysts.commengage.contract.qrd.UserRequestResponse;
 import org.catalysts.commengage.domain.QRCode;
 import org.catalysts.commengage.domain.UserRequest;
-import org.catalysts.commengage.repository.MapMyIndiaApiRepository;
 import org.catalysts.commengage.repository.QRCodeRepository;
 import org.catalysts.commengage.repository.QrdApiRepository;
 import org.catalysts.commengage.repository.UserRequestRepository;
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional
 @Slf4j
 public class QrdProcessor {
     private static final int QRD_PAGE_LIMIT = 1000;
@@ -34,41 +32,47 @@ public class QrdProcessor {
         qrdApi.getQRCodes().forEach(this::processQRCode);
     }
 
-    private void processQRCode(QRCodeDto qrCodeDto) {
-        QRCode qrCodeEntity = createOrUpdateQRCodeEntity(qrCodeDto);
-        int requestsOffset = qrCodeEntity.getRequestsOffset();
-        log.info("Current offset for {} is {}", qrCodeEntity.getQrdId(), requestsOffset);
+    protected void processQRCode(QRCodeResponse qrCodeResponse) {
+        QRCode qrCode = createOrUpdateQRCode(qrCodeResponse);
+        int requestsOffset = qrCode.getRequestsOffset();
+        log.info("Current offset for {} is {}", qrCode.getQrdId(), requestsOffset);
 
-        while(requestsOffset < qrCodeDto.getScans()) {
-            var requests = qrdApi.getQRCodeDetails(qrCodeDto.getQrdid(), QRD_PAGE_LIMIT, requestsOffset);
-            log.info("Requests count for qr {} is {}", qrCodeDto.getQrdid(), requests.size());
+        while(requestsOffset < qrCodeResponse.getScans()) {
+            var requests = qrdApi.getQRCodeDetails(qrCodeResponse.getQrdid(), QRD_PAGE_LIMIT, requestsOffset);
+            log.info("Requests count for qr {} is {}", qrCodeResponse.getQrdid(), requests.size());
             for (int i = 0; i < requests.size(); i++) {
-                UserRequestDto userRequestDto = requests.get(i);
-                requestsOffset = createUserRequest(qrCodeEntity, userRequestDto, requestsOffset);
-                log.info("QrCode: {}. Processed {} scans.", qrCodeEntity.getQrdId(), requestsOffset);
+                UserRequestResponse userRequestResponse = requests.get(i);
+                requestsOffset = addNewRequest(qrCode, requestsOffset, userRequestResponse);
+                log.info("QrCode: {}. Processed {} scans.", qrCode.getQrdId(), requestsOffset);
             }
         }
-
-        qrCodeEntity.setRequestsOffset(requestsOffset);
-        qrCodeRepository.save(qrCodeEntity);
     }
 
-    private int createUserRequest(QRCode qrCodeEntity, UserRequestDto userRequestDto,
+    @Transactional
+    protected int addNewRequest(QRCode qrCode, int requestsOffset, UserRequestResponse userRequestResponse) {
+        int newOffset = createUserRequest(qrCode, userRequestResponse, requestsOffset);
+        qrCode.setRequestsOffset(requestsOffset);
+        qrCodeRepository.save(qrCode);
+        return newOffset;
+    }
+
+    private int createUserRequest(QRCode qrCodeEntity, UserRequestResponse userRequestResponse,
                                   int requestsOffset) {
-        var userRequest = userRequestDto.createEntity(qrCodeEntity);
-        if (userRequestDto.getAccuracy() <= 5000) {
+        UserRequest userRequest = userRequestResponse.createEntity(qrCodeEntity);
+        if (userRequestResponse.getAccuracy() <= 5000) {
 //            setReverseGeoCodeDataOnUserRequest(userRequestDto.getLat(), userRequestDto.getLng(), userRequest);
         }
         userRequestRepository.save(userRequest);
         return requestsOffset + 1;
     }
 
-    private QRCode createOrUpdateQRCodeEntity(QRCodeDto qrCodeDto) {
-        QRCode entity = qrCodeRepository.findByQrdId(qrCodeDto.getQrdid());
+    @Transactional
+    protected QRCode createOrUpdateQRCode(QRCodeResponse qrCodeResponse) {
+        QRCode entity = qrCodeRepository.findByQrdId(qrCodeResponse.getQrdid());
         if (entity != null) {
-            qrCodeDto.updateEntity(entity);
+            qrCodeResponse.updateEntity(entity);
         } else {
-            entity = qrCodeDto.toEntity();
+            entity = qrCodeResponse.toEntity();
         }
         qrCodeRepository.save(entity);
         return entity;

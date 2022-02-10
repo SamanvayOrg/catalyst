@@ -10,8 +10,11 @@ import java.net.URI;
 
 @Component
 public class HealthCheckService {
-    @Value("${healthcheck.mainJob}")
-    private String mainJobId;
+    @Value("${healthcheck.qrdJob}")
+    private String qrdJob;
+
+    @Value("${healthcheck.googleJob}")
+    private String googleJob;
 
     private static final String PING_BASE_URL = "https://hc-ping.com/";
 
@@ -23,7 +26,11 @@ public class HealthCheckService {
     }
 
     public void verifyMainJob() {
-        verify(mainJobId);
+        verify(qrdJob);
+    }
+
+    public void verifyGoogleJob() {
+        verify(googleJob);
     }
 
     public void verify(String uuid) {

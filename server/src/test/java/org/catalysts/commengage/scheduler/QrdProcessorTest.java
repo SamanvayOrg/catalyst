@@ -1,7 +1,7 @@
 package org.catalysts.commengage.scheduler;
 
-import org.catalysts.commengage.contract.qrd.QRCodeDto;
-import org.catalysts.commengage.contract.qrd.UserRequestDto;
+import org.catalysts.commengage.contract.qrd.QRCodeResponse;
+import org.catalysts.commengage.contract.qrd.UserRequestResponse;
 import org.catalysts.commengage.repository.QRCodeRepository;
 import org.catalysts.commengage.repository.QrdApiRepository;
 import org.catalysts.commengage.repository.UserRequestRepository;
@@ -54,18 +54,18 @@ class QrdProcessorTest {
 
     }
 
-    private List<QRCodeDto> generateCodes() {
-        QRCodeDto qrCodeDto = new QRCodeDto();
-        qrCodeDto.setQrdid(CODE);
-        qrCodeDto.setScans(2200);
-        var codes = List.of(qrCodeDto);
+    private List<QRCodeResponse> generateCodes() {
+        QRCodeResponse qrCodeResponse = new QRCodeResponse();
+        qrCodeResponse.setQrdid(CODE);
+        qrCodeResponse.setScans(2200);
+        var codes = List.of(qrCodeResponse);
         return codes;
     }
 
-    private List<UserRequestDto> generateRequests(int numberOfRequests) {
-        var requests = new ArrayList<UserRequestDto>();
+    private List<UserRequestResponse> generateRequests(int numberOfRequests) {
+        var requests = new ArrayList<UserRequestResponse>();
         for (int i = 0; i < numberOfRequests; i++) {
-            requests.add(new UserRequestDto());
+            requests.add(new UserRequestResponse());
         }
         return requests;
     }

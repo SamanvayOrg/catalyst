@@ -13,7 +13,6 @@ import java.time.LocalTime;
 @Entity
 @Table(name = "user_request")
 public class UserRequest extends AbstractEntity {
-
     @ManyToOne()
     @JoinColumn(name = "qr_code_id")
     private QRCode qrCode;

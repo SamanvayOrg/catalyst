@@ -8,12 +8,12 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
-public class QrdScheduler {
+public class JobScheduler {
     private final QrdProcessor qrdProcessor;
     private final HealthCheckService healthCheckService;
 
     @Autowired
-    public QrdScheduler(QrdProcessor qrdProcessor, HealthCheckService healthCheckService) {
+    public JobScheduler(QrdProcessor qrdProcessor, HealthCheckService healthCheckService) {
         this.qrdProcessor = qrdProcessor;
         this.healthCheckService = healthCheckService;
     }
@@ -24,6 +24,18 @@ public class QrdScheduler {
             log.info("Qrd background job started");
             qrdProcessor.processQrCodes();
             healthCheckService.verifyMainJob();
+            log.info("Qrd background job completed");
+        } catch (Exception e) {
+            log.error("Job Failed", e);
+        }
+    }
+
+    @Scheduled(cron = "${commengage.google.cron}")
+    public void googleJob() {
+        try {
+            log.info("Google background job started");
+            qrdProcessor.processQrCodes();
+            healthCheckService.verifyGoogleJob();
             log.info("Qrd background job completed");
         } catch (Exception e) {
             log.error("Job Failed", e);

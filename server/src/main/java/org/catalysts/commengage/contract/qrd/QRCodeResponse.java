@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Setter
 @EqualsAndHashCode()
 @ToString
-public class QRCodeDto {
+public class QRCodeResponse {
     @JsonProperty("id")
     private String qrdid;
 

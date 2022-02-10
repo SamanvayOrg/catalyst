@@ -10,5 +10,5 @@ import java.util.List;
 @ToString
 public class QRCodeDetailsDto {
     private int requestcount;
-    private List<UserRequestDto> requests;
+    private List<UserRequestResponse> requests;
 }

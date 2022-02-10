@@ -9,5 +9,5 @@ import java.util.List;
 @EqualsAndHashCode()
 @ToString
 public class QRCodesListingDto {
-    private List<QRCodeDto> qrcodes;
+    private List<QRCodeResponse> qrcodes;
 }

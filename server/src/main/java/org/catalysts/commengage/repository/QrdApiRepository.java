@@ -29,7 +29,7 @@ public class QrdApiRepository {
     @Autowired
     private RestTemplate restTemplate;
 
-    public List<QRCodeDto> getQRCodes() {
+    public List<QRCodeResponse> getQRCodes() {
         // TODO: add limit and offset
         URI uri = RequestHelper.createUri(baseUrl + "/api/qrcodes", authParams());
         ResponseEntity<QRDContainer<QRCodesListingDto>> responseEntity =
@@ -41,7 +41,7 @@ public class QrdApiRepository {
         return responseEntity.getBody().getResult().getQrcodes();
     }
 
-    public List<UserRequestDto> getQRCodeDetails(String qrCodeId, int limit, int requestsOffset) {
+    public List<UserRequestResponse> getQRCodeDetails(String qrCodeId, int limit, int requestsOffset) {
         URI uri = RequestHelper.createUri(baseUrl + "/api/details",
                 qrCodeDetailsParams(qrCodeId, limit, requestsOffset));
         ResponseEntity<QRDContainer<QRCodeDetailsDto>> responseEntity =
