@@ -1,0 +1,268 @@
+{
+  "plus_code": {
+    "compound_code": "5PCR+222 Rathipur, Odisha, India",
+    "global_code": "7MG75PCR+222"
+  },
+  "results": [
+    {
+      "address_components": [
+        {
+          "long_name": "5PCR+22",
+          "short_name": "5PCR+22",
+          "types": [
+            "plus_code"
+          ]
+        },
+        {
+          "long_name": "Rathipur",
+          "short_name": "Rathipur",
+          "types": [
+            "locality",
+            "political"
+          ]
+        },
+        {
+          "long_name": "Khordha",
+          "short_name": "Khordha",
+          "types": [
+            "administrative_area_level_2",
+            "political"
+          ]
+        },
+        {
+          "long_name": "Odisha",
+          "short_name": "OR",
+          "types": [
+            "administrative_area_level_1",
+            "political"
+          ]
+        },
+        {
+          "long_name": "India",
+          "short_name": "IN",
+          "types": [
+            "country",
+            "political"
+          ]
+        },
+        {
+          "long_name": "752050",
+          "short_name": "752050",
+          "types": [
+            "postal_code"
+          ]
+        }
+      ],
+      "formatted_address": "5PCR+22 Rathipur, Odisha, India",
+      "geometry": {
+        "bounds": {
+          "northeast": {
+            "lat": 20.170125,
+            "lng": 85.74012499999999
+          },
+          "southwest": {
+            "lat": 20.17,
+            "lng": 85.73999999999999
+          }
+        },
+        "location": {
+          "lat": 20.17,
+          "lng": 85.73999999999999
+        },
+        "location_type": "GEOMETRIC_CENTER",
+        "viewport": {
+          "northeast": {
+            "lat": 20.1714114802915,
+            "lng": 85.74141148029149
+          },
+          "southwest": {
+            "lat": 20.1687135197085,
+            "lng": 85.73871351970848
+          }
+        }
+      },
+      "place_id": "GhIJ61G4HoUrNEARj8L1KFxvVUA",
+      "plus_code": {
+        "compound_code": "5PCR+22 Rathipur, Odisha, India",
+        "global_code": "7MG75PCR+22"
+      },
+      "types": [
+        "plus_code"
+      ]
+    },
+    {
+      "address_components": [
+        {
+          "long_name": "752050",
+          "short_name": "752050",
+          "types": [
+            "postal_code"
+          ]
+        },
+        {
+          "long_name": "Odisha",
+          "short_name": "OR",
+          "types": [
+            "administrative_area_level_1",
+            "political"
+          ]
+        },
+        {
+          "long_name": "India",
+          "short_name": "IN",
+          "types": [
+            "country",
+            "political"
+          ]
+        }
+      ],
+      "formatted_address": "Odisha 752050, India",
+      "geometry": {
+        "bounds": {
+          "northeast": {
+            "lat": 20.2059086,
+            "lng": 85.77778769999999
+          },
+          "southwest": {
+            "lat": 20.0776075,
+            "lng": 85.60789699999999
+          }
+        },
+        "location": {
+          "lat": 20.1595544,
+          "lng": 85.7051116
+        },
+        "location_type": "APPROXIMATE",
+        "viewport": {
+          "northeast": {
+            "lat": 20.2059086,
+            "lng": 85.77778769999999
+          },
+          "southwest": {
+            "lat": 20.0776075,
+            "lng": 85.60789699999999
+          }
+        }
+      },
+      "place_id": "ChIJiQlI14WuGToRKPRCUd9iC1s",
+      "types": [
+        "postal_code"
+      ]
+    },
+    {
+      "address_components": [
+        {
+          "long_name": "Khordha",
+          "short_name": "Khordha",
+          "types": [
+            "administrative_area_level_2",
+            "political"
+          ]
+        },
+        {
+          "long_name": "Odisha",
+          "short_name": "OR",
+          "types": [
+            "administrative_area_level_1",
+            "political"
+          ]
+        },
+        {
+          "long_name": "India",
+          "short_name": "IN",
+          "types": [
+            "country",
+            "political"
+          ]
+        }
+      ],
+      "formatted_address": "Khordha, Odisha, India",
+      "geometry": {
+        "bounds": {
+          "northeast": {
+            "lat": 20.4362901,
+            "lng": 86.08990989999999
+          },
+          "southwest": {
+            "lat": 19.6641199,
+            "lng": 84.9328099
+          }
+        },
+        "location": {
+          "lat": 20.130141,
+          "lng": 85.47880649999999
+        },
+        "location_type": "APPROXIMATE",
+        "viewport": {
+          "northeast": {
+            "lat": 20.4362901,
+            "lng": 86.08990989999999
+          },
+          "southwest": {
+            "lat": 19.6641199,
+            "lng": 84.9328099
+          }
+        }
+      },
+      "place_id": "ChIJEaZ6FMqgGToRzjy8dizX-H4",
+      "types": [
+        "administrative_area_level_2",
+        "political"
+      ]
+    },
+    {
+      "address_components": [
+        {
+          "long_name": "Odisha",
+          "short_name": "OR",
+          "types": [
+            "administrative_area_level_1",
+            "political"
+          ]
+        },
+        {
+          "long_name": "India",
+          "short_name": "IN",
+          "types": [
+            "country",
+            "political"
+          ]
+        }
+      ],
+      "formatted_address": "Odisha, India",
+      "geometry": {
+        "bounds": {
+          "northeast": {
+            "lat": 22.5700271,
+            "lng": 87.483385
+          },
+          "southwest": {
+            "lat": 17.811982,
+            "lng": 81.38842389999999
+          }
+        },
+        "location": {
+          "lat": 20.9516658,
+          "lng": 85.09852359999999
+        },
+        "location_type": "APPROXIMATE",
+        "viewport": {
+          "northeast": {
+            "lat": 22.5700271,
+            "lng": 87.483385
+          },
+          "southwest": {
+            "lat": 17.811982,
+            "lng": 81.38842389999999
+          }
+        }
+      },
+      "place_id": "ChIJ_Tuv6exqIjoRH6jOqcolNhM",
+      "types": [
+        "administrative_area_level_1",
+        "political"
+      ]
+    }
+  ],
+  "status": "OK"
+}

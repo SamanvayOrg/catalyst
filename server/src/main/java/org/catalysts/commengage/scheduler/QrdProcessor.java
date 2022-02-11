@@ -64,7 +64,7 @@ public class QrdProcessor {
     private int createUserRequest(QRCode qrCodeEntity, UserRequestResponse userRequestResponse,
                                   int requestsOffset) {
         UserRequest userRequest = userRequestResponse.createEntity(qrCodeEntity);
-        if (userRequestResponse.getAccuracy() <= 5000) {
+        if (userRequestResponse.getAccuracy() <= 5000 && userRequest.getLat() != 0) {
             CodedLocation codedLocation = codedLocationRepository.findByLatAndLng(GeolocationUtil.round(userRequest.getLat()), GeolocationUtil.round(userRequest.getLng()));
             if (codedLocation == null) {
                 CodedLocation savedCodedLocation = codedLocationRepository.save(userRequest.createCodedLocation());

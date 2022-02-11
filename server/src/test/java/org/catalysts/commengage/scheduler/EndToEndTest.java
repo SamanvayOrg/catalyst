@@ -2,19 +2,22 @@ package org.catalysts.commengage.scheduler;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
+import org.catalysts.commengage.config.AppConfig;
 import org.catalysts.commengage.contract.qrd.*;
-import org.catalysts.commengage.repository.CodedLocationRepository;
-import org.catalysts.commengage.repository.QRCodeRepository;
-import org.catalysts.commengage.repository.QrdApiRepository;
-import org.catalysts.commengage.repository.UserRequestRepository;
+import org.catalysts.commengage.domain.CodedLocation;
+import org.catalysts.commengage.domain.GoogleReverseGeoResponse;
+import org.catalysts.commengage.repository.*;
 import org.catalysts.commengage.util.FileUtil;
 import org.catalysts.commengage.util.ObjectMapperFactory;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 @SpringBootTest
 class EndToEndTest {
@@ -24,11 +27,33 @@ class EndToEndTest {
     private UserRequestRepository userRequestRepository;
     @Autowired
     private CodedLocationRepository codedLocationRepository;
+    @Autowired
+    private AppConfig appConfig;
 
     @Test
     public void processQrCodes() {
         QrdProcessor qrdProcessor = new QrdProcessor(new QrdApiRepositoryStub(), qrCodeRepository, userRequestRepository, codedLocationRepository);
         qrdProcessor.processQrCodes();
+        assertNotEquals(0, codedLocationRepository.findAllBy().size());
+
+        CodedLocationProcessor codedLocationProcessor = new CodedLocationProcessor(codedLocationRepository, new GoogleReverseGeoRepositoryStub(appConfig), appConfig);
+        codedLocationProcessor.process();
+    }
+
+    public static class GoogleReverseGeoRepositoryStub extends GoogleReverseGeoRepository {
+        public GoogleReverseGeoRepositoryStub(AppConfig appConfig) {
+            super(null, appConfig);
+        }
+
+        @Override
+        public GoogleReverseGeoResponse getReverseGeocode(CodedLocation codedLocation) {
+            try {
+                String s = FileUtil.readFile("/stubbedGoogleResponse.json");
+                return ObjectMapperFactory.OBJECT_MAPPER.readValue(s, GoogleReverseGeoResponse.class);
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     public static class QrdApiRepositoryStub extends QrdApiRepository {
