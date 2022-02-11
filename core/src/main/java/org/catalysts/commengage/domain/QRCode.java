@@ -1,15 +1,12 @@
 package org.catalysts.commengage.domain;
 
-import org.catalysts.commengage.domain.framework.AbstractEntity;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
-
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.data.annotation.LastModifiedDate;
 
 @Getter
 @Setter

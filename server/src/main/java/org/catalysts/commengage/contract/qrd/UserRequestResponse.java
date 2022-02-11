@@ -1,5 +1,6 @@
 package org.catalysts.commengage.contract.qrd;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import org.catalysts.commengage.domain.QRCode;
 import org.catalysts.commengage.domain.UserRequest;
@@ -11,6 +12,7 @@ import java.time.LocalTime;
 @Setter
 @EqualsAndHashCode()
 @ToString
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class UserRequestResponse {
 
     private String uniqueid;
