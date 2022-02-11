@@ -19,7 +19,7 @@ class GoogleReverseGeoResponseTest {
         assertEquals("Odisha", response.getState());
         assertEquals("Khordha", response.getDistrict());
         assertNull(response.getSubDistrict());
-        assertEquals("Rathipur", response.getCityVillage());
+        assertEquals("Rathipur", response.getVillageCity());
         assertEquals("752050", response.getPinCode());
     }
 
@@ -34,7 +34,7 @@ class GoogleReverseGeoResponseTest {
         assertEquals("Karnataka", response.getState());
         assertEquals("Bangalore Urban", response.getDistrict());
         assertNull(response.getSubDistrict());
-        assertEquals("Bengaluru", response.getCityVillage());
+        assertEquals("Bengaluru", response.getVillageCity());
         assertEquals("Jayamahal", response.getSublocality());
         assertEquals("560006", response.getPinCode());
     }

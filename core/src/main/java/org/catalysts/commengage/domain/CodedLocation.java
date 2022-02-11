@@ -1,5 +1,6 @@
 package org.catalysts.commengage.domain;
 
+import com.sun.istack.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,6 +13,9 @@ import javax.persistence.Table;
 @Table
 @Entity
 public class CodedLocation extends AuditedEntity {
+    @Column
+    private Boolean populatedOnce;
+
     @Column
     private String country;
 
@@ -31,11 +35,17 @@ public class CodedLocation extends AuditedEntity {
     private String subLocality;
 
     @Column
-    private int pinCode;
+    private String pinCode;
 
     @Column
+    @NotNull
     private double lat;
 
     @Column
+    @NotNull
     private double lng;
+
+    public String getLatLng() {
+        return String.format("%f,%f", lat, lng);
+    }
 }

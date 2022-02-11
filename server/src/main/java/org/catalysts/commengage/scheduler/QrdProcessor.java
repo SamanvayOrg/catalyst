@@ -3,11 +3,14 @@ package org.catalysts.commengage.scheduler;
 import lombok.extern.slf4j.Slf4j;
 import org.catalysts.commengage.contract.qrd.QRCodeResponse;
 import org.catalysts.commengage.contract.qrd.UserRequestResponse;
+import org.catalysts.commengage.domain.CodedLocation;
 import org.catalysts.commengage.domain.QRCode;
 import org.catalysts.commengage.domain.UserRequest;
+import org.catalysts.commengage.repository.CodedLocationRepository;
 import org.catalysts.commengage.repository.QRCodeRepository;
 import org.catalysts.commengage.repository.QrdApiRepository;
 import org.catalysts.commengage.repository.UserRequestRepository;
+import org.catalysts.commengage.util.GeolocationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,12 +23,14 @@ public class QrdProcessor {
     private final QrdApiRepository qrdApi;
     private final QRCodeRepository qrCodeRepository;
     private final UserRequestRepository userRequestRepository;
+    private final CodedLocationRepository codedLocationRepository;
 
     @Autowired
-    public QrdProcessor(QrdApiRepository qrdApi, QRCodeRepository qrCodeRepository, UserRequestRepository userRequestRepository) {
+    public QrdProcessor(QrdApiRepository qrdApi, QRCodeRepository qrCodeRepository, UserRequestRepository userRequestRepository, CodedLocationRepository codedLocationRepository) {
         this.qrdApi = qrdApi;
         this.qrCodeRepository = qrCodeRepository;
         this.userRequestRepository = userRequestRepository;
+        this.codedLocationRepository = codedLocationRepository;
     }
 
     public void processQrCodes() {
@@ -60,7 +65,11 @@ public class QrdProcessor {
                                   int requestsOffset) {
         UserRequest userRequest = userRequestResponse.createEntity(qrCodeEntity);
         if (userRequestResponse.getAccuracy() <= 5000) {
-//            setReverseGeoCodeDataOnUserRequest(userRequestDto.getLat(), userRequestDto.getLng(), userRequest);
+            CodedLocation codedLocation = codedLocationRepository.findByLatAndLng(GeolocationUtil.round(userRequest.getLat()), GeolocationUtil.round(userRequest.getLng()));
+            if (codedLocation == null) {
+                CodedLocation savedCodedLocation = codedLocationRepository.save(userRequest.createCodedLocation());
+                userRequest.setCodedLocation(savedCodedLocation);
+            }
         }
         userRequestRepository.save(userRequest);
         return requestsOffset + 1;

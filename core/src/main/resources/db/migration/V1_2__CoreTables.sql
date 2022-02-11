@@ -15,17 +15,21 @@ create table qr_code
 create table coded_location
 (
     id                 serial primary key,
+    populatedOnce      boolean                              not null,
     uuid               uuid      default uuid_generate_v4() not null unique,
     villageCity        text,
     sub_district       text,
     district           text,
     state              text,
-    pin_code           int,
-    lat                double precision,
-    lng                double precision,
+    pin_code           text,
+    lat                double precision                     not null,
+    lng                double precision                     not null,
     creation_date      timestamp default (now()):: timestamp without time zone not null,
     last_modified_date timestamp default (now()):: timestamp without time zone not null
 );
+
+alter table coded_location
+    add unique (lat, lng);
 
 create table user_request
 (
@@ -37,8 +41,8 @@ create table user_request
     request_date          date                            not null,
     local_scan_time       time                            not null,
     anonymized_ip         text,
-    lat                   double precision,
-    lng                   double precision,
+    lat                   double precision                not null,
+    lng                   double precision                not null,
     accuracy              double precision,
     browser               text,
     browser_version       text,

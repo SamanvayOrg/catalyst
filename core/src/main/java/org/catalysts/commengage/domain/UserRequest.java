@@ -1,8 +1,10 @@
 package org.catalysts.commengage.domain;
 
+import com.sun.istack.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.catalysts.commengage.domain.framework.AbstractEntity;
+import org.catalysts.commengage.util.GeolocationUtil;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -22,9 +24,11 @@ public class UserRequest extends AbstractEntity {
     private CodedLocation codedLocation;
 
     @Column
+    @NotNull
     private double lat;
 
     @Column
+    @NotNull
     private double lng;
 
     @Column
@@ -62,4 +66,12 @@ public class UserRequest extends AbstractEntity {
 
     @Column
     private String brand;
+
+    public CodedLocation createCodedLocation() {
+        CodedLocation codedLocation = new CodedLocation();
+        codedLocation.setLat(GeolocationUtil.round(this.getLat()));
+        codedLocation.setLng(GeolocationUtil.round(this.getLng()));
+        codedLocation.setPopulatedOnce(false);
+        return codedLocation;
+    }
 }

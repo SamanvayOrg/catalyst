@@ -11,11 +11,13 @@ import org.springframework.stereotype.Service;
 public class JobScheduler {
     private final QrdProcessor qrdProcessor;
     private final HealthCheckService healthCheckService;
+    private final CodedLocationProcessor codedLocationProcessor;
 
     @Autowired
-    public JobScheduler(QrdProcessor qrdProcessor, HealthCheckService healthCheckService) {
+    public JobScheduler(QrdProcessor qrdProcessor, HealthCheckService healthCheckService, CodedLocationProcessor codedLocationProcessor) {
         this.qrdProcessor = qrdProcessor;
         this.healthCheckService = healthCheckService;
+        this.codedLocationProcessor = codedLocationProcessor;
     }
 
     @Scheduled(cron = "${commengage.qrd.cron}")
@@ -34,7 +36,7 @@ public class JobScheduler {
     public void googleJob() {
         try {
             log.info("Google background job started");
-            qrdProcessor.processQrCodes();
+            codedLocationProcessor.process();
             healthCheckService.verifyGoogleJob();
             log.info("Qrd background job completed");
         } catch (Exception e) {
