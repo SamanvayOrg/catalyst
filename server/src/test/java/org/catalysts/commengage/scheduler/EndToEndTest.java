@@ -35,7 +35,8 @@ class EndToEndTest {
     public void processQrCodes() {
         QrdProcessor qrdProcessor = new QrdProcessor(new QrdApiRepositoryStub(), qrCodeRepository, userRequestRepository, codedLocationRepository);
         qrdProcessor.processQrCodes();
-        assertNotEquals(0, codedLocationRepository.findAllBy().size());
+        assertEquals(2, qrCodeRepository.findAllBy().size());
+        assertEquals(20, userRequestRepository.findAllBy().size());
 
         CodedLocationProcessor codedLocationProcessor = new CodedLocationProcessor(codedLocationRepository, new GoogleReverseGeoRepositoryStub(appConfig), appConfig);
         codedLocationProcessor.process();

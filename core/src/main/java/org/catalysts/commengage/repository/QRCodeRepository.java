@@ -5,7 +5,10 @@ import org.catalysts.commengage.domain.security.User;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface QRCodeRepository extends CrudRepository<QRCode, Integer> {
     QRCode findByQrdId(String qrdId);
+    List<QRCode> findAllBy();
 }

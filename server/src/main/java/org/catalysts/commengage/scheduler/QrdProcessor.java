@@ -15,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Slf4j
 public class QrdProcessor {
@@ -43,7 +45,7 @@ public class QrdProcessor {
         log.info("Current offset for {} is {}", qrCode.getQrdId(), requestsOffset);
 
         while(requestsOffset < qrCodeResponse.getScans()) {
-            var requests = qrdApi.getQRCodeDetails(qrCodeResponse.getQrdid(), QRD_PAGE_LIMIT, requestsOffset);
+            List<UserRequestResponse> requests = qrdApi.getQRCodeDetails(qrCodeResponse.getQrdid(), QRD_PAGE_LIMIT, requestsOffset);
             log.info("Requests count for qr {} is {}", qrCodeResponse.getQrdid(), requests.size());
             for (int i = 0; i < requests.size(); i++) {
                 UserRequestResponse userRequestResponse = requests.get(i);
