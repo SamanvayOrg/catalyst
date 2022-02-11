@@ -13,7 +13,6 @@ import org.catalysts.commengage.util.ObjectMapperFactory;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
 import java.util.List;
@@ -34,7 +33,7 @@ class EndToEndTest {
 
     @Test
     public void processQrCodes() {
-        QrdProcessor qrdProcessor = new QrdProcessor(new QrdApiRepositoryStub(), qrCodeRepository, userRequestRepository, codedLocationRepository);
+        QrdProcessor qrdProcessor = new QrdProcessor(QrdApiRepositoryStub.withNewRequests(), qrCodeRepository, userRequestRepository, codedLocationRepository);
         CodedLocationProcessor codedLocationProcessor = new CodedLocationProcessor(codedLocationRepository, new GoogleReverseGeoRepositoryStub(appConfig), appConfig);
 
         qrdProcessor.processQrCodes();
@@ -44,8 +43,25 @@ class EndToEndTest {
         assertEquals(10, qrCodes.get(1).getRequestsOffset());
         assertEquals(20, userRequestRepository.findAllBy().size());
 
+        assertNotEquals(0, codedLocationRepository.findAllByNumberOfTimesLookedUpEquals(0).size());
         codedLocationProcessor.process();
         assertEquals(0, codedLocationRepository.findAllByNumberOfTimesLookedUpEquals(0).size());
+        assertEquals(7, codedLocationRepository.findAllBy().size());
+
+//        Second Run
+        qrdProcessor = new QrdProcessor(QrdApiRepositoryStub.withIncrementalUserRequests(), qrCodeRepository, userRequestRepository, codedLocationRepository);
+        qrdProcessor.processQrCodes();
+        qrCodes = qrCodeRepository.findAllBy();
+        assertEquals(2, qrCodes.size());
+        assertEquals(10, qrCodes.get(0).getRequestsOffset());
+        assertEquals(11, qrCodes.get(1).getRequestsOffset());
+        assertEquals(21, userRequestRepository.findAllBy().size());
+
+        assertEquals(1, codedLocationRepository.findAllByNumberOfTimesLookedUpEquals(0).size());
+        assertEquals(8, codedLocationRepository.findAllBy().size());
+        codedLocationProcessor.process();
+        assertEquals(0, codedLocationRepository.findAllByNumberOfTimesLookedUpEquals(0).size());
+        assertEquals(8, codedLocationRepository.findAllBy().size());
     }
 
     public static class GoogleReverseGeoRepositoryStub extends GoogleReverseGeoRepository {
@@ -65,15 +81,26 @@ class EndToEndTest {
     }
 
     public static class QrdApiRepositoryStub extends QrdApiRepository {
-        private final HashMap<String, List<UserRequestResponse>> userRequestsMap;
+        private final HashMap<String, List<UserRequestResponse>> userRequestsMap = new HashMap<>();
+        private List<QRCodeResponse> qrCodeResponses;
 
-        public QrdApiRepositoryStub() {
-            userRequestsMap = new HashMap<>();
-            userRequestsMap.put("iec1", getUserRequests("/userRequests-iec1.json"));
-            userRequestsMap.put("nregaiec", getUserRequests("/userRequests-nregaiec.json"));
+        public static QrdApiRepositoryStub withNewRequests() {
+            QrdApiRepositoryStub qrdApiRepositoryStub = new QrdApiRepositoryStub();
+            qrdApiRepositoryStub.userRequestsMap.put("iec1", getUserRequests("/userRequests-iec1-1.json"));
+            qrdApiRepositoryStub.userRequestsMap.put("nregaiec", getUserRequests("/userRequests-nregaiec-1.json"));
+            qrdApiRepositoryStub.qrCodeResponses = createQrCodesResponse("/qrCodes-1.json");
+            return qrdApiRepositoryStub;
         }
 
-        private List<UserRequestResponse> getUserRequests(String fileName) {
+        public static QrdApiRepositoryStub withIncrementalUserRequests() {
+            QrdApiRepositoryStub qrdApiRepositoryStub = new QrdApiRepositoryStub();
+            qrdApiRepositoryStub.userRequestsMap.put("iec1", getUserRequests("/userRequests-iec1-2.json"));
+            qrdApiRepositoryStub.userRequestsMap.put("nregaiec", getUserRequests("/userRequests-nregaiec-2.json"));
+            qrdApiRepositoryStub.qrCodeResponses = createQrCodesResponse("/qrCodes-2.json");
+            return qrdApiRepositoryStub;
+        }
+
+        private static List<UserRequestResponse> getUserRequests(String fileName) {
             try {
                 String s = FileUtil.readFile(fileName);
                 QRDContainer<QRCodeDetailsDto> response = ObjectMapperFactory.OBJECT_MAPPER.readValue(s, new TypeReference<>() {
@@ -86,8 +113,12 @@ class EndToEndTest {
 
         @Override
         public List<QRCodeResponse> getQRCodes() {
+            return qrCodeResponses;
+        }
+
+        private static List<QRCodeResponse> createQrCodesResponse(String fileName) {
             try {
-                String s = FileUtil.readFile("/qrCodes.json");
+                String s = FileUtil.readFile(fileName);
                 QRDContainer<QRCodesListingDto> response = ObjectMapperFactory.OBJECT_MAPPER.readValue(s, new TypeReference<>() {
                 });
                 return response.getResult().getQrcodes();

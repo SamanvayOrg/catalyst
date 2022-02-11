@@ -47,6 +47,7 @@ public class CodedLocationProcessor {
         codedLocation.setVillageCity(reverseGeocode.getVillageCity());
         codedLocation.setSubLocality(reverseGeocode.getSublocality());
         codedLocation.setPinCode(reverseGeocode.getPinCode());
+        codedLocation.incrementNumberOfTimesLookedUp();
         codedLocationRepository.save(codedLocation);
     }
 }

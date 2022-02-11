@@ -1,0 +1,48 @@
+{
+  "result": {
+    "shorturl": "https://pmt.qrd.by/nregaiec",
+    "qr": "https://pmt.qrd.by/i/nregaiec",
+    "title": "NREGA Mandya-QR Code",
+    "description": "",
+    "url": "https://bright-mailman-710.notion.site/KA-NREGA-IEC-Job-creation-Tank-Ristoration-and-Vermi-Compost-199d29f157004f918276107374bf5a49",
+    "type": "URL",
+    "location": {
+      "address": "",
+      "lng": "",
+      "lat": ""
+    },
+    "creationdate": "2021-11-11 10:44:49",
+    "firstrequestdate": "2021-11-12 11:51:17",
+    "lastrequestdate": "2022-01-07 06:51:05",
+    "daysbetweenfirstandlastrequest": "56",
+    "dayssincecreated": "93",
+    "callsperday": "8.4285714285714",
+    "uniqevisitors": "11",
+    "requestcount": "11",
+    "requests": [
+      {
+        "uniqueid": "14029cd2087f334db7a25ad3f760e98c",
+        "anonymizedip": "85403ce1180c15c36f247e5feec5e75e",
+        "requestdate": "2021-11-12",
+        "localscantime": "16:21:17",
+        "region": "KA",
+        "countrycode": "IN",
+        "country": "India",
+        "lng": "77.6484",
+        "lat": "12.9664",
+        "accuracy": "13.574",
+        "street": "3rd Cross Rd",
+        "streetnumber": "27",
+        "postalcode": "560008",
+        "city": "Bengaluru",
+        "browser": "Chrome Mobile",
+        "browserversion": "95",
+        "os": "Android",
+        "osversion": "12",
+        "timezone": "Asia/Kolkata",
+        "model": "",
+        "brand": ""
+      }
+    ]
+  }
+}

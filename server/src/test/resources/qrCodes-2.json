@@ -1,0 +1,52 @@
+{
+  "result": {
+    "qrcodes": [
+      {
+        "id": "iec1",
+        "shorturl": "https://pmt.qrd.by/iec1",
+        "folder": "1. FES Rajasthan",
+        "tags": "",
+        "qr": "https://pmt.qrd.by/i/iec1",
+        "title": "Topic 1- शामलात संरक्षण के कानूनी प्रावधान",
+        "description": "A new tool that blends your everyday work apps into one. It's the all-in-one workspace for you and your team",
+        "type": "URL",
+        "subtype": "URL",
+        "url": "https://bright-mailman-710.notion.site/I-3e57bc95f5dc4d45aacfc7ee1200ec6e",
+        "gps": "0",
+        "static": "0",
+        "scans": "10",
+        "uniquevisitors": "9",
+        "creationdate": "2021-10-01 19:28:28",
+        "image": "",
+        "location": {
+          "address": "",
+          "lng": "",
+          "lat": ""
+        }
+      },
+      {
+        "id": "nregaiec",
+        "shorturl": "https://pmt.qrd.by/nregaiec",
+        "folder": "2. NREGA Mandya",
+        "tags": "",
+        "qr": "https://pmt.qrd.by/i/nregaiec",
+        "title": "NREGA Mandya-QR Code",
+        "description": "",
+        "type": "URL",
+        "subtype": "URL",
+        "url": "https://bright-mailman-710.notion.site/KA-NREGA-IEC-Job-creation-Tank-Ristoration-and-Vermi-Compost-199d29f157004f918276107374bf5a49",
+        "gps": "0",
+        "static": "0",
+        "scans": "11",
+        "uniquevisitors": "9",
+        "creationdate": "2021-11-11 10:44:49",
+        "image": "",
+        "location": {
+          "address": "",
+          "lng": "",
+          "lat": ""
+        }
+      }
+    ]
+  }
+}
