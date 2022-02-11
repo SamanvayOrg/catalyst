@@ -29,10 +29,6 @@ public class HealthCheckService {
         verify(qrdJob);
     }
 
-    public void verifyGoogleJob() {
-        verify(googleJob);
-    }
-
     public void verify(String uuid) {
         restTemplate.exchange(URI.create(String.format("%s%s", PING_BASE_URL, uuid)), HttpMethod.GET, null, String.class);
     }

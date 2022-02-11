@@ -20,25 +20,14 @@ public class JobScheduler {
         this.codedLocationProcessor = codedLocationProcessor;
     }
 
-    @Scheduled(cron = "${commengage.qrd.cron}")
-    public void qrdJob() {
+    @Scheduled(cron = "${commengage.main.cron}")
+    public void mainJob() {
         try {
-            log.info("Qrd background job started");
+            log.info("Background job started");
             qrdProcessor.processQrCodes();
-            healthCheckService.verifyMainJob();
-            log.info("Qrd background job completed");
-        } catch (Exception e) {
-            log.error("Job Failed", e);
-        }
-    }
-
-    @Scheduled(cron = "${commengage.google.cron}")
-    public void googleJob() {
-        try {
-            log.info("Google background job started");
             codedLocationProcessor.process();
-            healthCheckService.verifyGoogleJob();
-            log.info("Qrd background job completed");
+            healthCheckService.verifyMainJob();
+            log.info("Background job completed");
         } catch (Exception e) {
             log.error("Job Failed", e);
         }
