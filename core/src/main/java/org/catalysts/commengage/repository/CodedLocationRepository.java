@@ -14,7 +14,9 @@ public interface CodedLocationRepository extends CrudRepository<CodedLocation, I
     CodedLocation findByLatAndLng(double lat, double lng);
 
     @QueryHints(@javax.persistence.QueryHint(name="org.hibernate.fetchSize", value="50"))
-    List<CodedLocation> findAllByPopulatedOnceFalseOrLastModifiedDateBeforeOrderByLastModifiedDateAsc(Date date);
+    List<CodedLocation> findAllByNumberOfTimesLookedUpOrLastModifiedDateBeforeOrderByLastModifiedDateAsc(int numberOfTimesLookedUp, Date date);
 
     List<CodedLocation> findAllBy();
+
+    List<CodedLocation> findAllByNumberOfTimesLookedUpEquals(int numberOfTimesLookedUp);
 }

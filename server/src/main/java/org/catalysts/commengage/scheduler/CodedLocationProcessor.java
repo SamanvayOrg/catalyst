@@ -31,7 +31,7 @@ public class CodedLocationProcessor {
         while (true) {
             LocalDate localDate = LocalDate.now().minusDays(appConfig.getCacheDays());
             Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
-            List<CodedLocation> codedLocations = codedLocationRepository.findAllByPopulatedOnceFalseOrLastModifiedDateBeforeOrderByLastModifiedDateAsc(date);
+            List<CodedLocation> codedLocations = codedLocationRepository.findAllByNumberOfTimesLookedUpOrLastModifiedDateBeforeOrderByLastModifiedDateAsc(0, date);
             if (codedLocations.size() == 0) break;
 
             codedLocations.forEach(this::saveCodedLocation);
@@ -41,7 +41,6 @@ public class CodedLocationProcessor {
     @Transactional
     protected void saveCodedLocation(CodedLocation codedLocation) {
         GoogleReverseGeoResponse reverseGeocode = googleReverseGeoRepository.getReverseGeocode(codedLocation);
-        codedLocation.setPopulatedOnce(true);
         codedLocation.setCountry(reverseGeocode.getCountry());
         codedLocation.setState(reverseGeocode.getState());
         codedLocation.setDistrict(reverseGeocode.getDistrict());

@@ -71,7 +71,7 @@ public class UserRequest extends AbstractEntity {
         CodedLocation codedLocation = new CodedLocation();
         codedLocation.setLat(GeolocationUtil.round(this.getLat()));
         codedLocation.setLng(GeolocationUtil.round(this.getLng()));
-        codedLocation.setPopulatedOnce(false);
+        codedLocation.incrementNumberOfTimesLookedUp();
         return codedLocation;
     }
 }

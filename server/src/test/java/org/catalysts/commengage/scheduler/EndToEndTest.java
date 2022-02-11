@@ -17,6 +17,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.HashMap;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 @SpringBootTest
@@ -38,6 +39,7 @@ class EndToEndTest {
 
         CodedLocationProcessor codedLocationProcessor = new CodedLocationProcessor(codedLocationRepository, new GoogleReverseGeoRepositoryStub(appConfig), appConfig);
         codedLocationProcessor.process();
+        assertEquals(0, codedLocationRepository.findAllByNumberOfTimesLookedUpEquals(0).size());
     }
 
     public static class GoogleReverseGeoRepositoryStub extends GoogleReverseGeoRepository {

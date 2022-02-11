@@ -14,9 +14,6 @@ import javax.persistence.Table;
 @Entity
 public class CodedLocation extends AuditedEntity {
     @Column
-    private Boolean populatedOnce;
-
-    @Column
     private String country;
 
     @Column
@@ -45,7 +42,14 @@ public class CodedLocation extends AuditedEntity {
     @NotNull
     private double lng;
 
+    @Column
+    private int numberOfTimesLookedUp;
+
     public String getLatLng() {
         return String.format("%f,%f", lat, lng);
+    }
+
+    public void incrementNumberOfTimesLookedUp() {
+        numberOfTimesLookedUp++;
     }
 }
