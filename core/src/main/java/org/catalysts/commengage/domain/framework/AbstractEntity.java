@@ -1,13 +1,14 @@
 package org.catalysts.commengage.domain.framework;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.util.UUID;
 
 @MappedSuperclass
-@EntityListeners({AuditingEntityListener.class})
 public abstract class AbstractEntity {
     @GeneratedValue(generator = "system-uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")

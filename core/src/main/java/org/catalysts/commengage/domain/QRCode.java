@@ -9,13 +9,13 @@ import java.time.LocalDateTime;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.LastModifiedDate;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "qr_code")
-public class QRCode extends AbstractEntity {
-
+public class QRCode extends AuditedEntity {
     @Column
     private String qrdId;
 

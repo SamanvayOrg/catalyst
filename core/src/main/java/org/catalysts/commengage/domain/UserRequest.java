@@ -13,9 +13,13 @@ import java.time.LocalTime;
 @Entity
 @Table(name = "user_request")
 public class UserRequest extends AbstractEntity {
-    @ManyToOne()
+    @ManyToOne
     @JoinColumn(name = "qr_code_id")
     private QRCode qrCode;
+
+    @ManyToOne()
+    @JoinColumn(name = "coded_location_id")
+    private CodedLocation codedLocation;
 
     @Column
     private double lat;
@@ -58,22 +62,4 @@ public class UserRequest extends AbstractEntity {
 
     @Column
     private String brand;
-
-    @Column
-    private String village;
-
-    @Column
-    private String city;
-
-    @Column
-    private String subDistrict;
-
-    @Column
-    private String district;
-
-    @Column
-    private String state;
-
-    @Column
-    private int pinCode;
 }

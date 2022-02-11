@@ -65,7 +65,7 @@ public class GoogleReverseGeoResponse {
         return this.getField("administrative_area_level_3");
     }
 
-    public String getVillage() {
+    public String getCityVillage() {
         return this.getField("locality");
     }
 
@@ -84,5 +84,9 @@ public class GoogleReverseGeoResponse {
             });
         }
         return data.get(fieldName);
+    }
+
+    public String getSublocality() {
+        return getField("sublocality");
     }
 }
