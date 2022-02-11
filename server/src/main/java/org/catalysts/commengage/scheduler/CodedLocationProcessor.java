@@ -9,9 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -29,11 +26,8 @@ public class CodedLocationProcessor {
 
     public void process() {
         while (true) {
-            LocalDate localDate = LocalDate.now().minusDays(appConfig.getCacheDays());
-            Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
-            List<CodedLocation> codedLocations = codedLocationRepository.findAllByNumberOfTimesLookedUpOrLastModifiedDateBeforeOrderByLastModifiedDateAsc(0, date);
+            List<CodedLocation> codedLocations = codedLocationRepository.getNearExpiringAndNewLocations(appConfig.getCacheDays());
             if (codedLocations.size() == 0) break;
-
             codedLocations.forEach(this::saveCodedLocation);
         }
     }

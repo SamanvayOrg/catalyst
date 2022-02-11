@@ -44,9 +44,12 @@ class EndToEndTest {
         assertEquals(20, userRequestRepository.findAllBy().size());
 
         assertNotEquals(0, codedLocationRepository.findAllByNumberOfTimesLookedUpEquals(0).size());
+        List<CodedLocation> nearExpiringAndNewLocations = codedLocationRepository.getNearExpiringAndNewLocations(2);
+        assertEquals(7, nearExpiringAndNewLocations.size());
         codedLocationProcessor.process();
         assertEquals(0, codedLocationRepository.findAllByNumberOfTimesLookedUpEquals(0).size());
         assertEquals(7, codedLocationRepository.findAllBy().size());
+        assertEquals(0, codedLocationRepository.getNearExpiringAndNewLocations(2).size());
 
 //        Second Run
         qrdProcessor = new QrdProcessor(QrdApiRepositoryStub.withIncrementalUserRequests(), qrCodeRepository, userRequestRepository, codedLocationRepository);
@@ -59,9 +62,11 @@ class EndToEndTest {
 
         assertEquals(1, codedLocationRepository.findAllByNumberOfTimesLookedUpEquals(0).size());
         assertEquals(8, codedLocationRepository.findAllBy().size());
+        assertEquals(1, codedLocationRepository.getNearExpiringAndNewLocations(2).size());
         codedLocationProcessor.process();
         assertEquals(0, codedLocationRepository.findAllByNumberOfTimesLookedUpEquals(0).size());
         assertEquals(8, codedLocationRepository.findAllBy().size());
+        assertEquals(0, codedLocationRepository.getNearExpiringAndNewLocations(2).size());
     }
 
     public static class GoogleReverseGeoRepositoryStub extends GoogleReverseGeoRepository {
