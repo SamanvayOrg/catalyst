@@ -6,6 +6,7 @@ import org.catalysts.commengage.config.AppConfig;
 import org.catalysts.commengage.contract.qrd.*;
 import org.catalysts.commengage.domain.CodedLocation;
 import org.catalysts.commengage.domain.GoogleReverseGeoResponse;
+import org.catalysts.commengage.domain.QRCode;
 import org.catalysts.commengage.repository.*;
 import org.catalysts.commengage.util.FileUtil;
 import org.catalysts.commengage.util.ObjectMapperFactory;
@@ -34,11 +35,15 @@ class EndToEndTest {
     @Test
     public void processQrCodes() {
         QrdProcessor qrdProcessor = new QrdProcessor(new QrdApiRepositoryStub(), qrCodeRepository, userRequestRepository, codedLocationRepository);
+        CodedLocationProcessor codedLocationProcessor = new CodedLocationProcessor(codedLocationRepository, new GoogleReverseGeoRepositoryStub(appConfig), appConfig);
+
         qrdProcessor.processQrCodes();
-        assertEquals(2, qrCodeRepository.findAllBy().size());
+        List<QRCode> qrCodes = qrCodeRepository.findAllBy();
+        assertEquals(2, qrCodes.size());
+        assertEquals(10, qrCodes.get(0).getRequestsOffset());
+        assertEquals(10, qrCodes.get(1).getRequestsOffset());
         assertEquals(20, userRequestRepository.findAllBy().size());
 
-        CodedLocationProcessor codedLocationProcessor = new CodedLocationProcessor(codedLocationRepository, new GoogleReverseGeoRepositoryStub(appConfig), appConfig);
         codedLocationProcessor.process();
         assertEquals(0, codedLocationRepository.findAllByNumberOfTimesLookedUpEquals(0).size());
     }

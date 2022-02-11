@@ -58,7 +58,7 @@ public class QrdProcessor {
     @Transactional
     protected int addNewRequest(QRCode qrCode, int requestsOffset, UserRequestResponse userRequestResponse) {
         int newOffset = createUserRequest(qrCode, userRequestResponse, requestsOffset);
-        qrCode.setRequestsOffset(requestsOffset);
+        qrCode.setRequestsOffset(newOffset);
         qrCodeRepository.save(qrCode);
         return newOffset;
     }

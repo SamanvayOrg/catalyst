@@ -31,6 +31,7 @@ public class QRCode extends AuditedEntity {
     @Column
     private LocalDateTime creationDate;
 
+//    incremented on processing of one request
     @Column
     private int requestsOffset;
 
