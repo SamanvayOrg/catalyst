@@ -1,5 +1,6 @@
 package org.catalysts.commengage.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -12,13 +13,11 @@ import java.util.stream.Collectors;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class GoogleReverseGeoResponse {
     private List<Result> results = new ArrayList<>();
+    @JsonIgnore
+    private HashMap<String, String> data;
 
     public List<Result> getResults() {
         return results;
-    }
-
-    public void setResults(List<Result> results) {
-        this.results = results;
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -28,10 +27,6 @@ public class GoogleReverseGeoResponse {
 
         public List<AddressComponent> getAddressComponents() {
             return addressComponents;
-        }
-
-        public void setAddressComponents(List<AddressComponent> addressComponents) {
-            this.addressComponents = addressComponents;
         }
     }
 
@@ -52,20 +47,42 @@ public class GoogleReverseGeoResponse {
         public List<String> getTypes() {
             return types;
         }
-
-        public void setTypes(List<String> types) {
-            this.types = types;
-        }
     }
 
-    public Map<String, String> getData() {
-        List<AddressComponent> addressComponents = this.getResults().parallelStream().flatMap(result -> result.addressComponents.parallelStream()).collect(Collectors.toList());
-        HashMap<String, String> data = new HashMap<>();
-        addressComponents.forEach(addressComponent -> {
-            addressComponent.types.stream().filter(type -> !type.equals("political")).forEach(type -> {
-                data.put(type, addressComponent.name);
+    public String getCountry() {
+        return this.getField("country");
+    }
+
+    public String getState() {
+        return this.getField("administrative_area_level_1");
+    }
+
+    public String getDistrict() {
+        return this.getField("administrative_area_level_2");
+    }
+
+    public String getSubDistrict() {
+        return this.getField("administrative_area_level_3");
+    }
+
+    public String getVillage() {
+        return this.getField("locality");
+    }
+
+    public String getPinCode() {
+        return this.getField("postal_code");
+    }
+
+    private String getField(String fieldName) {
+        if (data == null) {
+            List<AddressComponent> addressComponents = this.getResults().parallelStream().flatMap(result -> result.addressComponents.parallelStream()).collect(Collectors.toList());
+            data = new HashMap<>();
+            addressComponents.forEach(addressComponent -> {
+                addressComponent.types.stream().filter(type -> !type.equals("political")).forEach(type -> {
+                    data.put(type, addressComponent.name);
+                });
             });
-        });
-        return data;
+        }
+        return data.get(fieldName);
     }
 }

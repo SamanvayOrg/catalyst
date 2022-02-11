@@ -1,30 +1,37 @@
 {
   "plus_code": {
-    "compound_code": "35HQ+XXX Jooniya, Rajasthan, India",
-    "global_code": "7JRQ35HQ+XXX"
+    "compound_code": "5PCR+222 Rathipur, Odisha, India",
+    "global_code": "7MG75PCR+222"
   },
   "results": [
     {
       "address_components": [
         {
-          "long_name": "Jooniya",
-          "short_name": "Jooniya",
+          "long_name": "5PCR+22",
+          "short_name": "5PCR+22",
+          "types": [
+            "plus_code"
+          ]
+        },
+        {
+          "long_name": "Rathipur",
+          "short_name": "Rathipur",
           "types": [
             "locality",
             "political"
           ]
         },
         {
-          "long_name": "Ajmer",
-          "short_name": "Ajmer",
+          "long_name": "Khordha",
+          "short_name": "Khordha",
           "types": [
             "administrative_area_level_2",
             "political"
           ]
         },
         {
-          "long_name": "Rajasthan",
-          "short_name": "RJ",
+          "long_name": "Odisha",
+          "short_name": "OR",
           "types": [
             "administrative_area_level_1",
             "political"
@@ -37,70 +44,64 @@
             "country",
             "political"
           ]
+        },
+        {
+          "long_name": "752050",
+          "short_name": "752050",
+          "types": [
+            "postal_code"
+          ]
         }
       ],
-      "formatted_address": "Jooniya, Rajasthan, India",
+      "formatted_address": "5PCR+22 Rathipur, Odisha, India",
       "geometry": {
         "bounds": {
           "northeast": {
-            "lat": 26.1079701,
-            "lng": 75.2457201
+            "lat": 20.170125,
+            "lng": 85.74012499999999
           },
           "southwest": {
-            "lat": 26.05103,
-            "lng": 75.16462989999999
+            "lat": 20.17,
+            "lng": 85.73999999999999
           }
         },
         "location": {
-          "lat": 26.0793867,
-          "lng": 75.20706439999999
+          "lat": 20.17,
+          "lng": 85.73999999999999
         },
-        "location_type": "APPROXIMATE",
+        "location_type": "GEOMETRIC_CENTER",
         "viewport": {
           "northeast": {
-            "lat": 26.1079701,
-            "lng": 75.2457201
+            "lat": 20.1714114802915,
+            "lng": 85.74141148029149
           },
           "southwest": {
-            "lat": 26.05103,
-            "lng": 75.16462989999999
+            "lat": 20.1687135197085,
+            "lng": 85.73871351970848
           }
         }
       },
-      "place_id": "ChIJwbcQzAa5bjkRH6E2y2FJtko",
+      "place_id": "GhIJ61G4HoUrNEARj8L1KFxvVUA",
+      "plus_code": {
+        "compound_code": "5PCR+22 Rathipur, Odisha, India",
+        "global_code": "7MG75PCR+22"
+      },
       "types": [
-        "locality",
-        "political"
+        "plus_code"
       ]
     },
     {
       "address_components": [
         {
-          "long_name": "305406",
-          "short_name": "305406",
+          "long_name": "752050",
+          "short_name": "752050",
           "types": [
             "postal_code"
           ]
         },
         {
-          "long_name": "Junia",
-          "short_name": "Junia",
-          "types": [
-            "locality",
-            "political"
-          ]
-        },
-        {
-          "long_name": "Ajmer",
-          "short_name": "Ajmer",
-          "types": [
-            "administrative_area_level_2",
-            "political"
-          ]
-        },
-        {
-          "long_name": "Rajasthan",
-          "short_name": "RJ",
+          "long_name": "Odisha",
+          "short_name": "OR",
           "types": [
             "administrative_area_level_1",
             "political"
@@ -115,35 +116,35 @@
           ]
         }
       ],
-      "formatted_address": "Junia, Rajasthan 305406, India",
+      "formatted_address": "Odisha 752050, India",
       "geometry": {
         "bounds": {
           "northeast": {
-            "lat": 26.1486078,
-            "lng": 75.2457
+            "lat": 20.2059086,
+            "lng": 85.77778769999999
           },
           "southwest": {
-            "lat": 25.9798015,
-            "lng": 75.0351
+            "lat": 20.0776075,
+            "lng": 85.60789699999999
           }
         },
         "location": {
-          "lat": 26.0887659,
-          "lng": 75.1311874
+          "lat": 20.1595544,
+          "lng": 85.7051116
         },
         "location_type": "APPROXIMATE",
         "viewport": {
           "northeast": {
-            "lat": 26.1486078,
-            "lng": 75.2457
+            "lat": 20.2059086,
+            "lng": 85.77778769999999
           },
           "southwest": {
-            "lat": 25.9798015,
-            "lng": 75.0351
+            "lat": 20.0776075,
+            "lng": 85.60789699999999
           }
         }
       },
-      "place_id": "ChIJY80UBJ23bjkRwi9m9JYbPL8",
+      "place_id": "ChIJiQlI14WuGToRKPRCUd9iC1s",
       "types": [
         "postal_code"
       ]
@@ -151,16 +152,16 @@
     {
       "address_components": [
         {
-          "long_name": "Ajmer",
-          "short_name": "Ajmer",
+          "long_name": "Khordha",
+          "short_name": "Khordha",
           "types": [
             "administrative_area_level_2",
             "political"
           ]
         },
         {
-          "long_name": "Rajasthan",
-          "short_name": "RJ",
+          "long_name": "Odisha",
+          "short_name": "OR",
           "types": [
             "administrative_area_level_1",
             "political"
@@ -175,35 +176,35 @@
           ]
         }
       ],
-      "formatted_address": "Ajmer, Rajasthan, India",
+      "formatted_address": "Khordha, Odisha, India",
       "geometry": {
         "bounds": {
           "northeast": {
-            "lat": 26.9784299,
-            "lng": 75.35437999999999
+            "lat": 20.4362901,
+            "lng": 86.08990989999999
           },
           "southwest": {
-            "lat": 25.6502799,
-            "lng": 73.9077099
+            "lat": 19.6641199,
+            "lng": 84.9328099
           }
         },
         "location": {
-          "lat": 26.1668245,
-          "lng": 74.7805192
+          "lat": 20.130141,
+          "lng": 85.47880649999999
         },
         "location_type": "APPROXIMATE",
         "viewport": {
           "northeast": {
-            "lat": 26.9784299,
-            "lng": 75.35437999999999
+            "lat": 20.4362901,
+            "lng": 86.08990989999999
           },
           "southwest": {
-            "lat": 25.6502799,
-            "lng": 73.9077099
+            "lat": 19.6641199,
+            "lng": 84.9328099
           }
         }
       },
-      "place_id": "ChIJCTMR1SbnazkR6OalbSwmFqI",
+      "place_id": "ChIJEaZ6FMqgGToRzjy8dizX-H4",
       "types": [
         "administrative_area_level_2",
         "political"
@@ -212,8 +213,8 @@
     {
       "address_components": [
         {
-          "long_name": "Rajasthan",
-          "short_name": "RJ",
+          "long_name": "Odisha",
+          "short_name": "OR",
           "types": [
             "administrative_area_level_1",
             "political"
@@ -228,35 +229,35 @@
           ]
         }
       ],
-      "formatted_address": "Rajasthan, India",
+      "formatted_address": "Odisha, India",
       "geometry": {
         "bounds": {
           "northeast": {
-            "lat": 30.1982126,
-            "lng": 78.26338109999999
+            "lat": 22.5700271,
+            "lng": 87.483385
           },
           "southwest": {
-            "lat": 23.0632669,
-            "lng": 69.4844128
+            "lat": 17.811982,
+            "lng": 81.38842389999999
           }
         },
         "location": {
-          "lat": 27.0238036,
-          "lng": 74.21793260000001
+          "lat": 20.9516658,
+          "lng": 85.09852359999999
         },
         "location_type": "APPROXIMATE",
         "viewport": {
           "northeast": {
-            "lat": 30.1982126,
-            "lng": 78.26338109999999
+            "lat": 22.5700271,
+            "lng": 87.483385
           },
           "southwest": {
-            "lat": 23.0632669,
-            "lng": 69.4844128
+            "lat": 17.811982,
+            "lng": 81.38842389999999
           }
         }
       },
-      "place_id": "ChIJNw7j9_o-ajkR5YjABkWbK7U",
+      "place_id": "ChIJ_Tuv6exqIjoRH6jOqcolNhM",
       "types": [
         "administrative_area_level_1",
         "political"
