@@ -112,17 +112,17 @@ deploy-to-vagrant: build-server deploy-to-vagrant-only
 
 #Production management
 deploy-to-prod: build-server
-	scp server/build/libs/server-0.0.1-SNAPSHOT.jar do-vrutti:/tmp
-	ssh do-vrutti "sudo cp /tmp/server-0.0.1-SNAPSHOT.jar /root/source/comm-engage-service/"
+	scp server/build/libs/server-0.0.1-SNAPSHOT.jar commeng:/tmp
+	ssh commeng "sudo cp /tmp/server-0.0.1-SNAPSHOT.jar /root/source/comm-engage-service/"
 
 start_service_prod:
-	ssh do-vrutti "sudo systemctl start comm-engage.service"
+	ssh commeng "sudo systemctl start comm-engage.service"
 
 stop_service_prod:
-	ssh do-vrutti "sudo systemctl stop comm-engage.service"
+	ssh commeng "sudo systemctl stop comm-engage.service"
 
 restart_service_prod:
-	ssh do-vrutti "sudo systemctl restart comm-engage.service"
+	ssh commeng "sudo systemctl restart comm-engage.service"
 
 backup-db-prod:
-	ssh do-vrutti "pg_dump -Ucommengage -hlocalhost commengage > /tmp/backup_$(shell date +%a).sql"
+	ssh commeng "pg_dump -Ucommengage -hlocalhost commengage > /tmp/backup_$(shell date +%a).sql"

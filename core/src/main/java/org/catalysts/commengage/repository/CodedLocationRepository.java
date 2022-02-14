@@ -17,11 +17,21 @@ public interface CodedLocationRepository extends CrudRepository<CodedLocation, I
 
     @QueryHints(@javax.persistence.QueryHint(name="org.hibernate.fetchSize", value="50"))
     List<CodedLocation> findAllByNumberOfTimesLookedUpOrLastModifiedDateBeforeOrderByLastModifiedDateAsc(int numberOfTimesLookedUp, Date date);
+    int countAllByNumberOfTimesLookedUpOrLastModifiedDateBeforeOrderByLastModifiedDateAsc(int numberOfTimesLookedUp, Date date);
 
     default List<CodedLocation> getNearExpiringAndNewLocations(int cacheDays) {
-        LocalDate localDate = LocalDate.now().minusDays(cacheDays);
-        Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        Date date = getDate(cacheDays);
         return findAllByNumberOfTimesLookedUpOrLastModifiedDateBeforeOrderByLastModifiedDateAsc(0, date);
+    }
+
+    private Date getDate(int cacheDays) {
+        LocalDate localDate = LocalDate.now().minusDays(cacheDays);
+        return Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+    }
+
+    default int countNearExpiringAndNewLocations(int cacheDays) {
+        Date date = getDate(cacheDays);
+        return countAllByNumberOfTimesLookedUpOrLastModifiedDateBeforeOrderByLastModifiedDateAsc(0, date);
     }
 
     int countAllBy();

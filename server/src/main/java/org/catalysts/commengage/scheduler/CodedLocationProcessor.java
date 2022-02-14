@@ -1,5 +1,6 @@
 package org.catalysts.commengage.scheduler;
 
+import lombok.extern.slf4j.Slf4j;
 import org.catalysts.commengage.config.AppConfig;
 import org.catalysts.commengage.domain.CodedLocation;
 import org.catalysts.commengage.domain.GoogleReverseGeoResponse;
@@ -12,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
+@Slf4j
 public class CodedLocationProcessor {
     private final CodedLocationRepository codedLocationRepository;
     private final GoogleReverseGeoRepository googleReverseGeoRepository;
@@ -26,9 +28,16 @@ public class CodedLocationProcessor {
 
     public void process() {
         while (true) {
+            int count = codedLocationRepository.countNearExpiringAndNewLocations(appConfig.getCacheDays());
+            if (count == 0) {
+                log.info("No coded locations to be renewed or to be fetched");
+                break;
+            }
+
             List<CodedLocation> codedLocations = codedLocationRepository.getNearExpiringAndNewLocations(appConfig.getCacheDays());
-            if (codedLocations.size() == 0) break;
+            log.info("Found {} coded locations to be renewed or to be fetched", count);
             codedLocations.forEach(this::saveCodedLocation);
+            log.info("Completed renewing/fetching coded locations");
         }
     }
 
