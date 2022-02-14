@@ -38,7 +38,6 @@ rebuild-db: drop-db build-db
 
 build-db:
 	$(call _build_db,$(DB))
-#	./gradlew migrateDb
 
 drop-db:
 	$(call _drop_db,$(DB))
@@ -46,13 +45,10 @@ drop-db:
 create-test-db:
 	$(call _build_db,$(TEST_DB))
 
-build-test-db: create-test-db
-	./gradlew migrateTestDb
-
 drop-test-db:
 	$(call _drop_db,$(TEST_DB))
 
-rebuild-test-db: drop-test-db build-test-db
+rebuild-test-db: drop-test-db create-test-db
 
 drop-roles:
 	-psql -h localhost -U $(SU) -d postgres -c 'drop role $(ADMIN_USER)';
@@ -72,7 +68,7 @@ run-server: build-db build-server
 run-server-without-background: build-server
 	java -jar server/build/libs/server-0.0.1-SNAPSHOT.jar --app.cron.main="0 0 6 6 9 ? 2035"
 
-test-server: drop-test-db build-test-db
+test-server: drop-test-db create-test-db
 	./gradlew clean build
 
 setup-external-test-db: drop-test-db create-test-db
