@@ -9,5 +9,6 @@ import java.util.List;
 @Repository
 public interface UserRequestRepository extends CrudRepository<UserRequest, Integer> {
     UserRequest findByUniqueQrdRequestId(String uniqueRequestId);
-    List<UserRequest> findAllBy();
+    int countAllBy();
+    int countAllByCodedLocationNotNull();
 }

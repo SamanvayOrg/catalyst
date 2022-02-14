@@ -7,6 +7,7 @@ import org.catalysts.commengage.contract.qrd.*;
 import org.catalysts.commengage.domain.CodedLocation;
 import org.catalysts.commengage.domain.GoogleReverseGeoResponse;
 import org.catalysts.commengage.domain.QRCode;
+import org.catalysts.commengage.domain.QRCodes;
 import org.catalysts.commengage.repository.*;
 import org.catalysts.commengage.util.FileUtil;
 import org.catalysts.commengage.util.ObjectMapperFactory;
@@ -36,19 +37,21 @@ class EndToEndTest {
         QrdProcessor qrdProcessor = new QrdProcessor(QrdApiRepositoryStub.withNewRequests(), qrCodeRepository, userRequestRepository, codedLocationRepository);
         CodedLocationProcessor codedLocationProcessor = new CodedLocationProcessor(codedLocationRepository, new GoogleReverseGeoRepositoryStub(appConfig), appConfig);
 
+//       First Run
         qrdProcessor.processQrCodes();
         List<QRCode> qrCodes = qrCodeRepository.findAllBy();
         assertEquals(2, qrCodes.size());
-        assertEquals(10, qrCodes.get(0).getRequestsOffset());
-        assertEquals(10, qrCodes.get(1).getRequestsOffset());
-        assertEquals(20, userRequestRepository.findAllBy().size());
+        assertEquals(10, QRCodes.findByQrCodeId("iec1", qrCodes).getRequestsOffset());
+        assertEquals(10, QRCodes.findByQrCodeId("nregaiec", qrCodes).getRequestsOffset());
+        assertEquals(20, userRequestRepository.countAllBy());
+        assertEquals(7, userRequestRepository.countAllByCodedLocationNotNull());
 
-        assertNotEquals(0, codedLocationRepository.findAllByNumberOfTimesLookedUpEquals(0).size());
+        assertNotEquals(0, codedLocationRepository.countAllByNumberOfTimesLookedUpEquals(0));
         List<CodedLocation> nearExpiringAndNewLocations = codedLocationRepository.getNearExpiringAndNewLocations(2);
         assertEquals(7, nearExpiringAndNewLocations.size());
         codedLocationProcessor.process();
-        assertEquals(0, codedLocationRepository.findAllByNumberOfTimesLookedUpEquals(0).size());
-        assertEquals(7, codedLocationRepository.findAllBy().size());
+        assertEquals(0, codedLocationRepository.countAllByNumberOfTimesLookedUpEquals(0));
+        assertEquals(7, codedLocationRepository.countAllBy());
         assertEquals(0, codedLocationRepository.getNearExpiringAndNewLocations(2).size());
 
 //        Second Run
@@ -58,14 +61,14 @@ class EndToEndTest {
         assertEquals(2, qrCodes.size());
         assertEquals(10, qrCodes.get(0).getRequestsOffset());
         assertEquals(11, qrCodes.get(1).getRequestsOffset());
-        assertEquals(21, userRequestRepository.findAllBy().size());
+        assertEquals(21, userRequestRepository.countAllBy());
 
-        assertEquals(1, codedLocationRepository.findAllByNumberOfTimesLookedUpEquals(0).size());
-        assertEquals(8, codedLocationRepository.findAllBy().size());
+        assertEquals(1, codedLocationRepository.countAllByNumberOfTimesLookedUpEquals(0));
+        assertEquals(8, codedLocationRepository.countAllBy());
         assertEquals(1, codedLocationRepository.getNearExpiringAndNewLocations(2).size());
         codedLocationProcessor.process();
-        assertEquals(0, codedLocationRepository.findAllByNumberOfTimesLookedUpEquals(0).size());
-        assertEquals(8, codedLocationRepository.findAllBy().size());
+        assertEquals(0, codedLocationRepository.countAllByNumberOfTimesLookedUpEquals(0));
+        assertEquals(8, codedLocationRepository.countAllBy());
         assertEquals(0, codedLocationRepository.getNearExpiringAndNewLocations(2).size());
     }
 

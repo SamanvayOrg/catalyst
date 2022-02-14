@@ -123,3 +123,6 @@ stop_service_prod:
 
 restart_service_prod:
 	ssh do-vrutti "sudo systemctl restart comm-engage.service"
+
+backup-db-prod:
+	ssh do-vrutti "pg_dump -Ucommengage -hlocalhost commengage > /tmp/backup_$(shell date +%a).sql"

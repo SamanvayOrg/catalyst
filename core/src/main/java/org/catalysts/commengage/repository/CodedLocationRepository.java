@@ -24,7 +24,6 @@ public interface CodedLocationRepository extends CrudRepository<CodedLocation, I
         return findAllByNumberOfTimesLookedUpOrLastModifiedDateBeforeOrderByLastModifiedDateAsc(0, date);
     }
 
-    List<CodedLocation> findAllBy();
-
-    List<CodedLocation> findAllByNumberOfTimesLookedUpEquals(int numberOfTimesLookedUp);
+    int countAllBy();
+    int countAllByNumberOfTimesLookedUpEquals(int numberOfTimesLookedUp);
 }

@@ -1,4 +1,5 @@
 {
+  "comment": "1 boundary condition request",
   "result": {
     "shorturl": "https://pmt.qrd.by/nregaiec",
     "qr": "https://pmt.qrd.by/i/nregaiec",
@@ -30,7 +31,7 @@
         "country": "India",
         "lng": "77.577",
         "lat": "13.1311",
-        "accuracy": "40",
+        "accuracy": "5000",
         "street": "",
         "streetnumber": "",
         "postalcode": "",

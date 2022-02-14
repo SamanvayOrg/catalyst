@@ -69,9 +69,9 @@ public class QrdProcessor {
         if (userRequestResponse.getAccuracy() <= 5000 && userRequest.getLat() != 0) {
             CodedLocation codedLocation = codedLocationRepository.findByLatAndLng(GeolocationUtil.round(userRequest.getLat()), GeolocationUtil.round(userRequest.getLng()));
             if (codedLocation == null) {
-                CodedLocation savedCodedLocation = codedLocationRepository.save(userRequest.createCodedLocation());
-                userRequest.setCodedLocation(savedCodedLocation);
+                codedLocation = codedLocationRepository.save(userRequest.createCodedLocation());
             }
+            userRequest.setCodedLocation(codedLocation);
         }
         userRequestRepository.save(userRequest);
         return requestsOffset + 1;
