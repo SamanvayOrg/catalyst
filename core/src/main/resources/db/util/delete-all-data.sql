@@ -1,4 +1,4 @@
-drop table if exists flyway_schema_history;
+delete from flyway_schema_history where 1 = 1;
 drop table if exists password_reset_token;
 drop table if exists access_control;
 drop table if exists user_request;

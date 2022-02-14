@@ -38,7 +38,7 @@ rebuild-db: drop-db build-db
 
 build-db:
 	$(call _build_db,$(DB))
-	./gradlew migrateDb
+#	./gradlew migrateDb
 
 drop-db:
 	$(call _drop_db,$(DB))
