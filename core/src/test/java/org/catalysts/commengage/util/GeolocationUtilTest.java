@@ -9,7 +9,7 @@ class GeolocationUtilTest {
     @Test
     public void round() {
         double rounded = GeolocationUtil.round("20.17300000000");
-        assertEquals(20.17, rounded);
-        assertNotEquals(20.173, rounded);
+        assertEquals(20.173, rounded);
+        assertNotEquals(20.17, rounded);
     }
 }

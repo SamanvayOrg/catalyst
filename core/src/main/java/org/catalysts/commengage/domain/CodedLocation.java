@@ -26,13 +26,13 @@ public class CodedLocation extends AuditedEntity {
     private String subDistrict;
 
     @Column
+    private String block;
+
+    @Column
+    private String panchayat;
+
+    @Column
     private String villageCity;
-
-    @Column
-    private String subLocality;
-
-    @Column
-    private String pinCode;
 
     @Column
     @NotNull

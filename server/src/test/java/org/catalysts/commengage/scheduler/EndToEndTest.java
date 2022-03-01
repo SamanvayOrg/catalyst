@@ -4,10 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import org.catalysts.commengage.config.AppConfig;
 import org.catalysts.commengage.contract.qrd.*;
-import org.catalysts.commengage.domain.CodedLocation;
-import org.catalysts.commengage.domain.GoogleReverseGeoResponse;
-import org.catalysts.commengage.domain.QRCode;
-import org.catalysts.commengage.domain.QRCodes;
+import org.catalysts.commengage.domain.*;
 import org.catalysts.commengage.repository.*;
 import org.catalysts.commengage.util.FileUtil;
 import org.catalysts.commengage.util.ObjectMapperFactory;
@@ -32,10 +29,9 @@ class EndToEndTest {
     @Autowired
     private AppConfig appConfig;
 
-    @Test
     public void processQrCodes() {
         QrdProcessor qrdProcessor = new QrdProcessor(QrdApiRepositoryStub.withNewRequests(), qrCodeRepository, userRequestRepository, codedLocationRepository);
-        CodedLocationProcessor codedLocationProcessor = new CodedLocationProcessor(codedLocationRepository, new GoogleReverseGeoRepositoryStub(appConfig), appConfig);
+        CodedLocationProcessor codedLocationProcessor = new CodedLocationProcessor(codedLocationRepository, new FESReverseGeoRepositoryStub(appConfig), appConfig);
 
 //       First Run
         qrdProcessor.processQrCodes();
@@ -82,6 +78,22 @@ class EndToEndTest {
             try {
                 String s = FileUtil.readFile("/stubbedGoogleResponse.json");
                 return ObjectMapperFactory.OBJECT_MAPPER.readValue(s, GoogleReverseGeoResponse.class);
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    public static class FESReverseGeoRepositoryStub extends FESReverseGeoRepository {
+        public FESReverseGeoRepositoryStub(AppConfig appConfig) {
+            super(null, appConfig);
+        }
+
+        @Override
+        public FESReverseGeoResponse getReverseGeocode(CodedLocation codedLocation) {
+            try {
+                String s = FileUtil.readFile("/stubbedFESResponse.json");
+                return ObjectMapperFactory.OBJECT_MAPPER.readValue(s, FESReverseGeoResponse.class);
             } catch (JsonProcessingException e) {
                 throw new RuntimeException(e);
             }

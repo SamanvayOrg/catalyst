@@ -7,6 +7,6 @@ public class GeolocationUtil {
     }
 
     public static double round(double locationElement) {
-        return Math.round(locationElement * 100.0) / 100.0;
+        return Math.round(locationElement * 1000.0) / 1000.0;
     }
 }

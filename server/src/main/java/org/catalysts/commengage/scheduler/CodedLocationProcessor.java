@@ -3,8 +3,10 @@ package org.catalysts.commengage.scheduler;
 import lombok.extern.slf4j.Slf4j;
 import org.catalysts.commengage.config.AppConfig;
 import org.catalysts.commengage.domain.CodedLocation;
+import org.catalysts.commengage.domain.FESReverseGeoResponse;
 import org.catalysts.commengage.domain.GoogleReverseGeoResponse;
 import org.catalysts.commengage.repository.CodedLocationRepository;
+import org.catalysts.commengage.repository.FESReverseGeoRepository;
 import org.catalysts.commengage.repository.GoogleReverseGeoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,13 +18,13 @@ import java.util.List;
 @Slf4j
 public class CodedLocationProcessor {
     private final CodedLocationRepository codedLocationRepository;
-    private final GoogleReverseGeoRepository googleReverseGeoRepository;
+    private final FESReverseGeoRepository fesReverseGeoRepository;
     private final AppConfig appConfig;
 
     @Autowired
-    public CodedLocationProcessor(CodedLocationRepository codedLocationRepository, GoogleReverseGeoRepository googleReverseGeoRepository, AppConfig appConfig) {
+    public CodedLocationProcessor(CodedLocationRepository codedLocationRepository, FESReverseGeoRepository fesReverseGeoRepository, AppConfig appConfig) {
         this.codedLocationRepository = codedLocationRepository;
-        this.googleReverseGeoRepository = googleReverseGeoRepository;
+        this.fesReverseGeoRepository = fesReverseGeoRepository;
         this.appConfig = appConfig;
     }
 
@@ -43,13 +45,13 @@ public class CodedLocationProcessor {
 
     @Transactional
     protected void saveCodedLocation(CodedLocation codedLocation) {
-        GoogleReverseGeoResponse reverseGeocode = googleReverseGeoRepository.getReverseGeocode(codedLocation);
+        FESReverseGeoResponse reverseGeocode = fesReverseGeoRepository.getReverseGeocode(codedLocation);
         codedLocation.setCountry(reverseGeocode.getCountry());
         codedLocation.setState(reverseGeocode.getState());
         codedLocation.setDistrict(reverseGeocode.getDistrict());
         codedLocation.setVillageCity(reverseGeocode.getVillageCity());
-        codedLocation.setSubLocality(reverseGeocode.getSublocality());
-        codedLocation.setPinCode(reverseGeocode.getPinCode());
+        codedLocation.setBlock(reverseGeocode.getBlock());
+        codedLocation.setPanchayat(reverseGeocode.getPanchayat());
         codedLocation.incrementNumberOfTimesLookedUp();
         codedLocationRepository.save(codedLocation);
     }

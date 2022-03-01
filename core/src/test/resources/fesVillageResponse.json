@@ -1,0 +1,41 @@
+{
+  "responseType": "1",
+  "text": [
+    {
+      "id": "701800",
+      "mc": "912136203042407543",
+      "name": "Bhelurihat",
+      "type": "Village"
+    },
+    {
+      "id": "311168",
+      "mc": "912136203042119535",
+      "name": "Bainchua",
+      "type": "Panchayat"
+    },
+    {
+      "id": "11277",
+      "mc": "912136200178000000",
+      "name": "Balianta",
+      "type": "Block"
+    },
+    {
+      "id": "538",
+      "mc": "912136200000000000",
+      "name": "Khordha",
+      "type": "District"
+    },
+    {
+      "id": "5195",
+      "mc": "912136203042000000",
+      "name": "Balianta",
+      "type": "Sub district"
+    },
+    {
+      "id": "13",
+      "mc": "912100000000000000",
+      "name": "Odisha",
+      "type": "State"
+    }
+  ]
+}

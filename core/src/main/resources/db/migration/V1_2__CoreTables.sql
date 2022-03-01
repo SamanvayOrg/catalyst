@@ -23,9 +23,10 @@ create table coded_location
     state                     text,
     district                  text,
     sub_district              text,
+    block                     text,
+    panchayat                 text,
     village_city              text,
     sub_locality              text,
-    pin_code                  text,
     lat                       double precision not null,
     lng                       double precision not null,
     number_of_times_looked_up integer          not null default 0
