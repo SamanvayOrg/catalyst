@@ -26,7 +26,6 @@ create table coded_location
     block                     text,
     panchayat                 text,
     village_city              text,
-    sub_locality              text,
     lat                       double precision not null,
     lng                       double precision not null,
     number_of_times_looked_up integer          not null default 0

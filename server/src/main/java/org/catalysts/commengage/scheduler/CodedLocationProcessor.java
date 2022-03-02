@@ -1,13 +1,13 @@
 package org.catalysts.commengage.scheduler;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.extern.slf4j.Slf4j;
 import org.catalysts.commengage.config.AppConfig;
 import org.catalysts.commengage.domain.CodedLocation;
-import org.catalysts.commengage.domain.FESReverseGeoResponse;
-import org.catalysts.commengage.domain.GoogleReverseGeoResponse;
+import org.catalysts.commengage.domain.fes.FESReverseGeoResponse;
+import org.catalysts.commengage.domain.fes.FESReverseGeoSuccessResponse;
 import org.catalysts.commengage.repository.CodedLocationRepository;
 import org.catalysts.commengage.repository.FESReverseGeoRepository;
-import org.catalysts.commengage.repository.GoogleReverseGeoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,9 +49,10 @@ public class CodedLocationProcessor {
         codedLocation.setCountry(reverseGeocode.getCountry());
         codedLocation.setState(reverseGeocode.getState());
         codedLocation.setDistrict(reverseGeocode.getDistrict());
-        codedLocation.setVillageCity(reverseGeocode.getVillageCity());
+        codedLocation.setSubDistrict(reverseGeocode.getSubDistrict());
         codedLocation.setBlock(reverseGeocode.getBlock());
         codedLocation.setPanchayat(reverseGeocode.getPanchayat());
+        codedLocation.setVillageCity(reverseGeocode.getVillageCity());
         codedLocation.incrementNumberOfTimesLookedUp();
         codedLocationRepository.save(codedLocation);
     }

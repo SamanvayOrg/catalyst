@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import org.catalysts.commengage.config.AppConfig;
 import org.catalysts.commengage.contract.qrd.*;
 import org.catalysts.commengage.domain.*;
+import org.catalysts.commengage.domain.fes.FESReverseGeoSuccessResponse;
 import org.catalysts.commengage.repository.*;
 import org.catalysts.commengage.util.FileUtil;
 import org.catalysts.commengage.util.ObjectMapperFactory;
@@ -29,6 +30,7 @@ class EndToEndTest {
     @Autowired
     private AppConfig appConfig;
 
+    @Test
     public void processQrCodes() {
         QrdProcessor qrdProcessor = new QrdProcessor(QrdApiRepositoryStub.withNewRequests(), qrCodeRepository, userRequestRepository, codedLocationRepository);
         CodedLocationProcessor codedLocationProcessor = new CodedLocationProcessor(codedLocationRepository, new FESReverseGeoRepositoryStub(appConfig), appConfig);
@@ -41,13 +43,14 @@ class EndToEndTest {
         assertEquals(10, QRCodes.findByQrCodeId("nregaiec", qrCodes).getRequestsOffset());
         assertEquals(20, userRequestRepository.countAllBy());
         assertEquals(7, userRequestRepository.countAllByCodedLocationNotNull());
+        assertEquals(6, codedLocationRepository.countAllBy());
 
         assertNotEquals(0, codedLocationRepository.countAllByNumberOfTimesLookedUpEquals(0));
         List<CodedLocation> nearExpiringAndNewLocations = codedLocationRepository.getNearExpiringAndNewLocations(2);
-        assertEquals(7, nearExpiringAndNewLocations.size());
+        assertEquals(6, nearExpiringAndNewLocations.size());
         codedLocationProcessor.process();
         assertEquals(0, codedLocationRepository.countAllByNumberOfTimesLookedUpEquals(0));
-        assertEquals(7, codedLocationRepository.countAllBy());
+        assertEquals(6, codedLocationRepository.countAllBy());
         assertEquals(0, codedLocationRepository.getNearExpiringAndNewLocations(2).size());
 
 //        Second Run
@@ -60,11 +63,11 @@ class EndToEndTest {
         assertEquals(21, userRequestRepository.countAllBy());
 
         assertEquals(1, codedLocationRepository.countAllByNumberOfTimesLookedUpEquals(0));
-        assertEquals(8, codedLocationRepository.countAllBy());
+        assertEquals(7, codedLocationRepository.countAllBy());
         assertEquals(1, codedLocationRepository.getNearExpiringAndNewLocations(2).size());
         codedLocationProcessor.process();
         assertEquals(0, codedLocationRepository.countAllByNumberOfTimesLookedUpEquals(0));
-        assertEquals(8, codedLocationRepository.countAllBy());
+        assertEquals(7, codedLocationRepository.countAllBy());
         assertEquals(0, codedLocationRepository.getNearExpiringAndNewLocations(2).size());
     }
 
@@ -90,10 +93,10 @@ class EndToEndTest {
         }
 
         @Override
-        public FESReverseGeoResponse getReverseGeocode(CodedLocation codedLocation) {
+        public FESReverseGeoSuccessResponse getReverseGeocode(CodedLocation codedLocation) {
             try {
                 String s = FileUtil.readFile("/stubbedFESResponse.json");
-                return ObjectMapperFactory.OBJECT_MAPPER.readValue(s, FESReverseGeoResponse.class);
+                return ObjectMapperFactory.OBJECT_MAPPER.readValue(s, FESReverseGeoSuccessResponse.class);
             } catch (JsonProcessingException e) {
                 throw new RuntimeException(e);
             }
