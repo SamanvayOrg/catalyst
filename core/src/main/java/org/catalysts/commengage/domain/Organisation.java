@@ -5,8 +5,8 @@ import org.catalysts.commengage.domain.framework.AbstractEntity;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-@Entity
-@Table(name = "organisation")
+//@Entity
+//@Table(name = "organisation")
 public class Organisation extends AbstractEntity {
     private String name;
 

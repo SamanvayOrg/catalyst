@@ -66,7 +66,7 @@ run-server: build-db build-server
 	$(call _run_server)
 
 run-server-without-background: build-server
-	java -jar server/build/libs/server-0.0.1-SNAPSHOT.jar --app.cron.main="0 0 6 6 9 ? 2035"
+	java -jar server/build/libs/server-0.0.1-SNAPSHOT.jar --commengage.main.cron="0 3 0 28 2 *"
 
 test-server: drop-test-db create-test-db
 	./gradlew clean build
