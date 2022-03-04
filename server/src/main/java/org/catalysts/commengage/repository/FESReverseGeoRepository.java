@@ -34,8 +34,7 @@ public class FESReverseGeoRepository {
 
     public FESReverseGeoResponse getReverseGeocode(CodedLocation codedLocation) {
         try {
-            URI uri = RequestHelper.createUri("https://adminhierarchy.indiaobservatory.org.in/API/getRegionDetailsByLatLon", getParams(codedLocation));
-
+            URI uri = URI.create(String.format("https://adminhierarchy.indiaobservatory.org.in/API/getRegionDetailsByLatLon?lat=%s&lon=%s", codedLocation.getLat(), codedLocation.getLng()));
             log.info("Calling URL: {}", uri.toString());
             ResponseEntity<String> responseJson =
                     restTemplate.exchange(uri,
@@ -48,12 +47,5 @@ public class FESReverseGeoRepository {
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    private Map<String, String> getParams(CodedLocation codedLocation) {
-        Map<String, String> params = new HashMap<>();
-        params.put("lat", Double.toString(codedLocation.getLat()));
-        params.put("lon", Double.toString(codedLocation.getLng()));
-        return params;
     }
 }
