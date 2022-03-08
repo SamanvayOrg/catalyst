@@ -32,7 +32,7 @@ class EndToEndTest {
 
     @Test
     public void processQrCodes() {
-        QrdProcessor qrdProcessor = new QrdProcessor(QrdApiRepositoryStub.withNewRequests(), qrCodeRepository, userRequestRepository, codedLocationRepository);
+        QrdProcessor qrdProcessor = new QrdProcessor(QrdApiRepositoryStub.withNewRequests(), qrCodeRepository, userRequestRepository, codedLocationRepository, appConfig);
         CodedLocationProcessor codedLocationProcessor = new CodedLocationProcessor(codedLocationRepository, new FESReverseGeoRepositoryStub(appConfig), appConfig);
 
 //       First Run
@@ -54,7 +54,7 @@ class EndToEndTest {
         assertEquals(0, codedLocationRepository.getNearExpiringAndNewLocations(2).size());
 
 //        Second Run
-        qrdProcessor = new QrdProcessor(QrdApiRepositoryStub.withIncrementalUserRequests(), qrCodeRepository, userRequestRepository, codedLocationRepository);
+        qrdProcessor = new QrdProcessor(QrdApiRepositoryStub.withIncrementalUserRequests(), qrCodeRepository, userRequestRepository, codedLocationRepository, appConfig);
         qrdProcessor.processQrCodes();
         qrCodes = qrCodeRepository.findAllBy();
         assertEquals(2, qrCodes.size());
@@ -151,7 +151,7 @@ class EndToEndTest {
         }
 
         @Override
-        public List<UserRequestResponse> getQRCodeDetails(String qrCodeId, int limit, int requestsOffset) {
+        public List<UserRequestResponse> getQRCodeUserRequests(String qrCodeId, int limit, int requestsOffset) {
             return userRequestsMap.get(qrCodeId);
         }
     }

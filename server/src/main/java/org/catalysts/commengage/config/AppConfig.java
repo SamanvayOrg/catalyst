@@ -11,6 +11,9 @@ public class AppConfig {
     @Value("${google.cache.days}")
     private int cacheDays;
 
+    @Value("${commengage.qr.code}")
+    private String qrCode;
+
     public String getApiKey() {
         return apiKey;
     }
@@ -21,5 +24,9 @@ public class AppConfig {
 
     public void setCacheDays(int cacheDays) {
         this.cacheDays = cacheDays;
+    }
+
+    public String getQrCodeToProcess() {
+        return qrCode;
     }
 }

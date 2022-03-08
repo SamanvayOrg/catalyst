@@ -41,7 +41,7 @@ public class QrdApiRepository {
         return responseEntity.getBody().getResult().getQrcodes();
     }
 
-    public List<UserRequestResponse> getQRCodeDetails(String qrCodeId, int limit, int requestsOffset) {
+    public List<UserRequestResponse> getQRCodeUserRequests(String qrCodeId, int limit, int requestsOffset) {
         URI uri = RequestHelper.createUri(baseUrl + "/api/details",
                 qrCodeDetailsParams(qrCodeId, limit, requestsOffset));
         ResponseEntity<QRDContainer<QRCodeDetailsDto>> responseEntity =

@@ -1,6 +1,8 @@
 package org.catalysts.commengage.scheduler;
 
 import lombok.extern.slf4j.Slf4j;
+import org.catalysts.commengage.QrdUserRequestUtil;
+import org.catalysts.commengage.config.AppConfig;
 import org.catalysts.commengage.contract.qrd.QRCodeResponse;
 import org.catalysts.commengage.contract.qrd.UserRequestResponse;
 import org.catalysts.commengage.domain.CodedLocation;
@@ -13,6 +15,7 @@ import org.catalysts.commengage.repository.UserRequestRepository;
 import org.catalysts.commengage.util.GeolocationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -20,42 +23,51 @@ import java.util.List;
 @Service
 @Slf4j
 public class QrdProcessor {
-    private static final int QRD_PAGE_LIMIT = 1000;
 
     private final QrdApiRepository qrdApi;
     private final QRCodeRepository qrCodeRepository;
     private final UserRequestRepository userRequestRepository;
     private final CodedLocationRepository codedLocationRepository;
+    private final AppConfig appConfig;
 
     @Autowired
-    public QrdProcessor(QrdApiRepository qrdApi, QRCodeRepository qrCodeRepository, UserRequestRepository userRequestRepository, CodedLocationRepository codedLocationRepository) {
+    public QrdProcessor(QrdApiRepository qrdApi, QRCodeRepository qrCodeRepository, UserRequestRepository userRequestRepository, CodedLocationRepository codedLocationRepository, AppConfig appConfig) {
         this.qrdApi = qrdApi;
         this.qrCodeRepository = qrCodeRepository;
         this.userRequestRepository = userRequestRepository;
         this.codedLocationRepository = codedLocationRepository;
+        this.appConfig = appConfig;
     }
 
     public void processQrCodes() {
-        qrdApi.getQRCodes().forEach(this::processQRCode);
+        String qrCodeToProcess = appConfig.getQrCodeToProcess();
+        List<QRCodeResponse> qrCodes = qrdApi.getQRCodes();
+        if (qrCodeToProcess == null || qrCodeToProcess.isEmpty())
+            qrCodes.forEach(this::processQRCode);
+        else
+            qrCodes.stream().filter(qrCodeResponse -> qrCodeResponse.getQrdid().equals(qrCodeToProcess)).forEach(this::processQRCode);
     }
 
     protected void processQRCode(QRCodeResponse qrCodeResponse) {
         QRCode qrCode = createOrUpdateQRCode(qrCodeResponse);
-        int requestsOffset = qrCode.getRequestsOffset();
-        log.info("Current offset for {} is {}", qrCode.getQrdId(), requestsOffset);
+        int requestsOffsetProcessed = qrCode.getRequestsOffset();
+        int totalScans = qrCodeResponse.getScans();
+        log.info("Current offset for {} is {}. Total scans: {}", qrCode.getQrdId(), requestsOffsetProcessed, totalScans);
 
-        while(requestsOffset < qrCodeResponse.getScans()) {
-            List<UserRequestResponse> requests = qrdApi.getQRCodeDetails(qrCodeResponse.getQrdid(), QRD_PAGE_LIMIT, requestsOffset);
-            log.info("Requests count for qr {} is {}", qrCodeResponse.getQrdid(), requests.size());
-            for (int i = 0; i < requests.size(); i++) {
+        while(requestsOffsetProcessed < totalScans) {
+            int requestOffset = QrdUserRequestUtil.getRequestOffset(totalScans, requestsOffsetProcessed);
+            int requestLimit = QrdUserRequestUtil.getRequestLimit(totalScans, requestsOffsetProcessed);
+            List<UserRequestResponse> requests = qrdApi.getQRCodeUserRequests(qrCodeResponse.getQrdid(), requestLimit, requestOffset);
+            log.info("Offset requested is {} with limit {}. Requests count for qr {} is {}.", requestOffset, requestLimit, qrCodeResponse.getQrdid(), requests.size());
+            for (int i = requests.size() - 1; i >= 0; i--) {
                 UserRequestResponse userRequestResponse = requests.get(i);
-                requestsOffset = addNewRequest(qrCode, requestsOffset, userRequestResponse);
-                log.info("QrCode: {}. Processed {} scans.", qrCode.getQrdId(), requestsOffset);
+                requestsOffsetProcessed = addNewRequest(qrCode, requestsOffsetProcessed, userRequestResponse);
+                log.info("QrCode: {}. Processed {} scans.", qrCode.getQrdId(), requestsOffsetProcessed);
             }
         }
     }
 
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     protected int addNewRequest(QRCode qrCode, int requestsOffset, UserRequestResponse userRequestResponse) {
         int newOffset = createUserRequest(qrCode, userRequestResponse, requestsOffset);
         qrCode.setRequestsOffset(newOffset);
