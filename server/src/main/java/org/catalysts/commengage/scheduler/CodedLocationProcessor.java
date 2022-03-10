@@ -1,11 +1,9 @@
 package org.catalysts.commengage.scheduler;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.extern.slf4j.Slf4j;
 import org.catalysts.commengage.config.AppConfig;
 import org.catalysts.commengage.domain.CodedLocation;
 import org.catalysts.commengage.domain.fes.FESReverseGeoResponse;
-import org.catalysts.commengage.domain.fes.FESReverseGeoSuccessResponse;
 import org.catalysts.commengage.repository.CodedLocationRepository;
 import org.catalysts.commengage.repository.FESReverseGeoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
