@@ -1,7 +1,7 @@
 ## Setup Server
 
 #### Install required software
-1. Install Java version 15
+1. Install Java version 17 (current production is running on 17.0.1)
 2. Install Postgres 12
 3. Create database user `create user commengage with password 'password' createrole`
 4. Create a database with above user as owner `create database commengage with owner commengage`
